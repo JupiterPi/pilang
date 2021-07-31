@@ -25,10 +25,12 @@ public class Expression extends Value {
     private final List<String> operators = Arrays.asList("+-*/".split(""));
     private final List<String> numbers = Arrays.asList("0123456789".split(""));
     private final List<String> whitespaces = Arrays.asList(" ".split(""));
+    private final List<String> brackets = Arrays.asList("()".split(""));
 
     // buffer
     private String buffer = null;
     private String bufferType = null;
+    private int bracketLevel = 0;
 
     // values buffer
     private Value a = null;
@@ -40,6 +42,33 @@ public class Expression extends Value {
         for (String c : expr.split("")) {
             if (c.equals(";")) {
                 flushBuffer();
+                continue;
+            }
+
+            if (c.equals("(")) {
+                if (bracketLevel == 0) {
+                    flushBuffer();
+                    flushOperation();
+                    buffer = "";
+                    bufferType = null;
+
+                    bracketLevel++;
+                    continue;
+                }
+                bracketLevel++;
+            }
+            if (c.equals(")")) {
+                bracketLevel--;
+                if (bracketLevel == 0) {
+                    appendValue(new Expression(buffer));
+                    buffer = null;
+                    bufferType = null;
+                    flushOperation();
+                    continue;
+                }
+            }
+            if (bracketLevel > 0) {
+                buffer += c;
                 continue;
             }
 
@@ -92,6 +121,8 @@ public class Expression extends Value {
     }
 
     private void flushBuffer() {
+        if (buffer == null || buffer.isEmpty()) return;
+
         String type = "";
         for (String c : buffer.split("")) {
             String cType = getCharacterType(c);
@@ -109,15 +140,26 @@ public class Expression extends Value {
             }
         } else if (type.equals("number")) {
             Value value = new Literal(buffer);
-            if (a == null) {
-                a = value;
+            appendValue(value);
+        }
+    }
+
+    private void appendValue(Value value) {
+        if (a == null) {
+            a = value;
+        } else {
+            if (b == null) {
+                b = value;
             } else {
-                if (b == null) {
-                    b = value;
-                } else {
-                    new Exception("no space for value: " + buffer).printStackTrace();
-                }
+                new Exception("no space for value: " + value).printStackTrace();
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Expression{" +
+                "operation=" + operation +
+                '}';
     }
 }
