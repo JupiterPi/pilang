@@ -11,4 +11,11 @@ public class Literal extends Value {
     public String get() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "Literal{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

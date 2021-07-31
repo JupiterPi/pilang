@@ -28,4 +28,13 @@ public class Operation extends Value {
         new Exception("invalid operator: " + operator).printStackTrace();
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Operation{" +
+                "operator='" + operator + '\'' +
+                ", a=" + a.toString() +
+                ", b=" + b.toString() +
+                '}';
+    }
 }

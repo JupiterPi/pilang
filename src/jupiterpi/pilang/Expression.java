@@ -15,6 +15,10 @@ public class Expression extends Value {
         return operation.get();
     }
 
+    public Operation getOperation() {
+        return operation;
+    }
+
     /* parser */
 
     // character types
@@ -36,11 +40,14 @@ public class Expression extends Value {
         for (String c : expr.split("")) {
             if (c.equals(";")) {
                 flushBuffer();
+                continue;
             }
 
             String cType = getCharacterType(c);
             if (cType.equals("whitespace")) {
                 flushBuffer();
+                buffer = null;
+                bufferType = null;
             } else {
                 if (buffer == null) {
                     buffer = c;
@@ -55,22 +62,33 @@ public class Expression extends Value {
                     }
                 }
             }
-
-            if (a != null && operator != null && b != null) {
-                a = new Operation(a, operator, b);
-                operator = null;
-                b = null;
-            }
+            flushOperation();
         }
+        flushOperation();
         return (Operation) a;
     }
 
+    private void flushOperation() {
+        if (a != null && operator != null && b != null) {
+            a = new Operation(a, operator, b);
+            operator = null;
+            b = null;
+        }
+    }
+
     private String getCharacterType(String c) {
-        if (operators.contains(c)) return "operator";
-        if (numbers.contains(c)) return "number";
-        if (whitespaces.contains(c)) return "whitespace";
+        if (listContains(operators, c)) return "operator";
+        if (listContains(numbers, c)) return "number";
+        if (listContains(whitespaces, c)) return "whitespace";
         new Exception("invalid character: " + c).printStackTrace();
         return "";
+    }
+
+    private boolean listContains(List<String> list, String c) {
+        for (String lc : list) {
+            if (lc.equals(c)) return true;
+        }
+        return false;
     }
 
     private void flushBuffer() {
