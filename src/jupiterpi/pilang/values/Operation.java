@@ -4,16 +4,25 @@ public class Operation extends Value {
     private String operator;
     private Value a;
     private Value b;
+    private DataType type;
 
     public Operation(Value a, String operator, Value b) {
         this.operator = operator;
-        this.a = a;
-        this.b = b;
+        if (a.getType().equals(b.getType())) {
+            this.a = a;
+            this.b = b;
+            type = a.getType();
+        } else new Exception("mismatching types: a: " + a.getType() + "b: " + b.getType()).printStackTrace();
     }
 
     @Override
     public String get() {
         return Integer.toString(calculate());
+    }
+
+    @Override
+    public DataType getType() {
+        return type;
     }
 
     private int calculate() {

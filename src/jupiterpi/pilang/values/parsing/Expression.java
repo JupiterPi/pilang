@@ -1,5 +1,6 @@
 package jupiterpi.pilang.values.parsing;
 
+import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Literal;
 import jupiterpi.pilang.values.Operation;
 import jupiterpi.pilang.values.Value;
@@ -30,6 +31,11 @@ public class Expression extends Value {
     @Override
     public String get() {
         return operation.get();
+    }
+
+    @Override
+    public DataType getType() {
+        return operation.getType();
     }
 
     public Operation getOperation() {
