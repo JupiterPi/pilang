@@ -1,5 +1,8 @@
 package jupiterpi.pilang.values.parsing;
 
+import java.util.List;
+import static jupiterpi.pilang.values.parsing.Token.Type.*;
+
 public class Token {
     public enum Type {
         LITERAL, OPERATOR, EXPRESSION
@@ -32,5 +35,15 @@ public class Token {
                 "type=" + type +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    /* other */
+
+    public static Token expressionFromTokens(List<Token> tokens) {
+        String expr = "";
+        for (Token token : tokens) {
+            expr += token.getContent();
+        }
+        return new Token(EXPRESSION, expr);
     }
 }

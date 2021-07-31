@@ -9,13 +9,6 @@ import java.util.List;
 import static jupiterpi.pilang.values.parsing.Token.Type.*;
 
 public class ExpressionLexer {
-    public static void main(String[] args) {
-        ExpressionLexer lexer = new ExpressionLexer("5 + (4 - (3+2) + 6) - 5");
-        for (Token token : lexer.getTokens()) {
-            System.out.println(token);
-        }
-    }
-
     private List<Token> tokens = new ArrayList<>();
 
     public ExpressionLexer(String expr) {

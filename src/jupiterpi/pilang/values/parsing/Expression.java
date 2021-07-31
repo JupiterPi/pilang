@@ -3,6 +3,7 @@ package jupiterpi.pilang.values.parsing;
 import jupiterpi.pilang.values.Literal;
 import jupiterpi.pilang.values.Operation;
 import jupiterpi.pilang.values.Value;
+import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 
 import java.util.List;
 
@@ -12,7 +13,17 @@ public class Expression extends Value {
     private final Operation operation;
 
     public Expression(String expr) {
-        List<Token> tokens = new ExpressionLexer(expr).getTokens();
+        ExpressionLexer lexer = new ExpressionLexer(expr);
+        List<Token> tokens = lexer.getTokens();
+
+        ExpressionPrecedencer precedencer = new ExpressionPrecedencer(tokens);
+        tokens = precedencer.getTokens();
+
+        if (tokens.size() == 1) {
+            if (tokens.get(0).getType() == EXPRESSION) {
+
+            }
+        }
         operation = parseTokens(tokens);
     }
 
