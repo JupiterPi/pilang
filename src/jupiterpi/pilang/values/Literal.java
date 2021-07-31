@@ -1,4 +1,4 @@
-package jupiterpi.pilang;
+package jupiterpi.pilang.values;
 
 public class Literal extends Value {
     private String value;
