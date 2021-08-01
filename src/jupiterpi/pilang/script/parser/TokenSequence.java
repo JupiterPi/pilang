@@ -4,6 +4,7 @@ import jupiterpi.pilang.script.lexer.Token;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class TokenSequence extends ArrayList<Token> {
     public TokenSequence() {}
@@ -12,19 +13,32 @@ public class TokenSequence extends ArrayList<Token> {
     @Override
     public boolean contains(Object o) {
         Token t = (Token) o;
-        Token.Type type = t.getType();
-        String content = t.getContent();
         for (Token token : this) {
-            if (token.getType() == type) {
-                if (content != null) {
-                    if (token.getContent().equals(content)) {
-                        return true;
-                    }
-                } else {
-                    return true;
-                }
-            }
+            if (token.equals(t)) return true;
         }
         return false;
+    }
+
+    public List<TokenSequence> split(Token at) {
+        List<TokenSequence> subsequences = new ArrayList<>();
+        TokenSequence buffer = new TokenSequence();
+        for (Token token : this) {
+            if (token.equals(at)) {
+                subsequences.add(buffer);
+                buffer = new TokenSequence();
+            } else {
+                buffer.add(token);
+            }
+        }
+        subsequences.add(buffer);
+        return subsequences;
+    }
+
+    public String backToString() {
+        String str = "";
+        for (Token token : this) {
+            str += token.backToString();
+        }
+        return str;
     }
 }

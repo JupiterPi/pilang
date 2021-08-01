@@ -39,6 +39,27 @@ public class Token {
                 '}';
     }
 
+    public String backToString() {
+        return getContent();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Token t = (Token) obj;
+        Token.Type type = t.getType();
+        String content = t.getContent();
+        if (getType() == type) {
+            if (content != null) {
+                if (getContent().equals(content)) {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* other */
 
     public static Token expressionFromTokens(TokenSequence tokens) {
