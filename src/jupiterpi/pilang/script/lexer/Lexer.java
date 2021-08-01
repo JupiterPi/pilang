@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script.lexer;
 
 import jupiterpi.pilang.script.lexer.Token.Type;
+import jupiterpi.pilang.values.DataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,10 +26,11 @@ public class Lexer {
     private final List<String> operators = Arrays.asList("+-*/".split(""));
     private final List<String> numbers = Arrays.asList("0123456789".split(""));
     private final List<String> whitespaces = Arrays.asList(" ".split(""));
+    private final List<String> text = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
 
     // buffer
     private String buffer = null;
-    private Type bufferType = null;
+    private String bufferType = null;
     private int bracketLevel = 0;
 
     private List<Token> generateTokens(String expr) {
@@ -43,7 +45,7 @@ public class Lexer {
                 if (bracketLevel == 0) {
                     flushBuffer();
                     buffer = "";
-                    bufferType = EXPRESSION;
+                    bufferType = "expression";
 
                     bracketLevel++;
                     continue;
@@ -64,8 +66,15 @@ public class Lexer {
                 continue;
             }
 
-            Type cType = getCharacterType(c);
-            if (cType == null) {
+            if (c.equals("=")) {
+                flushBuffer();
+                buffer = c;
+                bufferType = "assign";
+                continue;
+            }
+
+            String cType = getCharacterType(c);
+            if (cType == "whitespace") {
                 flushBuffer();
                 buffer = null;
                 bufferType = null;
@@ -74,7 +83,7 @@ public class Lexer {
                     buffer = c;
                     bufferType = cType;
                 } else {
-                    if (bufferType == cType) {
+                    if (bufferType.equals(cType)) {
                         buffer += c;
                     } else {
                         flushBuffer();
@@ -87,10 +96,11 @@ public class Lexer {
         return tokens;
     }
 
-    private Type getCharacterType(String c) {
-        if (listContains(operators, c)) return OPERATOR;
-        if (listContains(numbers, c)) return LITERAL;
-        if (listContains(whitespaces, c)) return null;
+    private String getCharacterType(String c) {
+        if (listContains(operators, c)) return "operator";
+        if (listContains(numbers, c)) return "literal";
+        if (listContains(text, c)) return "text";
+        if (listContains(whitespaces, c)) return "whitespace";
         new Exception("invalid character: " + c).printStackTrace();
         return null;
     }
@@ -104,6 +114,28 @@ public class Lexer {
 
     private void flushBuffer() {
         if (buffer == null || buffer.isEmpty()) return;
-        tokens.add(new Token(bufferType, buffer));
+        Type type = null;
+        switch (bufferType) {
+            case "operator":
+                type = OPERATOR;
+                break;
+            case "literal":
+                type = LITERAL;
+                break;
+            case "text":
+                if (DataType.from(buffer) != null) {
+                    type = TYPE;
+                } else {
+                    type = IDENTIFIER;
+                }
+                break;
+            case "expression":
+                type = EXPRESSION;
+                break;
+            case "assign":
+                type = ASSIGN;
+                break;
+        }
+        tokens.add(new Token(type, buffer));
     }
 }

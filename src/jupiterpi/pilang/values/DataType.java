@@ -17,6 +17,20 @@ public class DataType {
         this.isArray = isArray;
     }
 
+    public static DataType from(String str) {
+        boolean isArray = false;
+        if (str.endsWith("[]")) {
+            isArray = true;
+            str = str.substring(0, str.length() - 2);
+        }
+        try {
+            BaseType baseType = BaseType.valueOf(str.toUpperCase());
+            return new DataType(baseType, isArray);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     /* getters */
 
     public BaseType getBaseType() {

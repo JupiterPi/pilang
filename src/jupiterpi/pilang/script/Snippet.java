@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Snippet {
     public static void main(String[] args) {
-        Snippet snippet = new Snippet("5 + 3; 4 + 7");
+        Snippet snippet = new Snippet("int a = 5 + 3");
         for (List<Token> line : snippet.tokens) {
             System.out.println(line);
         }
