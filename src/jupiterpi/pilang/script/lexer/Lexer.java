@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script.lexer;
 
 import jupiterpi.pilang.script.lexer.Token.Type;
+import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.values.DataType;
 
 import java.util.ArrayList;
@@ -10,13 +11,13 @@ import java.util.List;
 import static jupiterpi.pilang.script.lexer.Token.Type.*;
 
 public class Lexer {
-    private List<Token> tokens = new ArrayList<>();
+    private TokenSequence tokens = new TokenSequence();
 
     public Lexer(String expr) {
         tokens = generateTokens(expr);
     }
 
-    public List<Token> getTokens() {
+    public TokenSequence getTokens() {
         return tokens;
     }
 
@@ -33,7 +34,7 @@ public class Lexer {
     private String bufferType = null;
     private int bracketLevel = 0;
 
-    private List<Token> generateTokens(String expr) {
+    private TokenSequence generateTokens(String expr) {
         expr = expr + ";";
         for (String c : expr.split("")) {
             if (c.equals(";")) {

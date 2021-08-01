@@ -1,8 +1,8 @@
 package jupiterpi.pilang.script.lexer;
 
-import java.util.List;
+import jupiterpi.pilang.script.parser.TokenSequence;
 
-import static jupiterpi.pilang.script.lexer.Token.Type.*;
+import static jupiterpi.pilang.script.lexer.Token.Type.EXPRESSION;
 
 public class Token {
     public enum Type {
@@ -41,7 +41,7 @@ public class Token {
 
     /* other */
 
-    public static Token expressionFromTokens(List<Token> tokens) {
+    public static Token expressionFromTokens(TokenSequence tokens) {
         String expr = "";
         for (Token token : tokens) {
             expr += token.getContent();

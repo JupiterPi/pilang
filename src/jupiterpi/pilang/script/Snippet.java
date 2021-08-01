@@ -1,7 +1,7 @@
 package jupiterpi.pilang.script;
 
 import jupiterpi.pilang.script.lexer.Lexer;
-import jupiterpi.pilang.script.lexer.Token;
+import jupiterpi.pilang.script.parser.TokenSequence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +9,12 @@ import java.util.List;
 public class Snippet {
     public static void main(String[] args) {
         Snippet snippet = new Snippet("int a = 5 + 3");
-        for (List<Token> line : snippet.tokens) {
+        for (TokenSequence line : snippet.lines) {
             System.out.println(line);
         }
     }
 
-    private List<List<Token>> tokens = new ArrayList<>();
+    private List<TokenSequence> lines = new ArrayList<>();
 
     public Snippet(String content) {
         generateTokens(content);
@@ -25,9 +25,9 @@ public class Snippet {
     private void generateTokens(String content) {
         for (String line : content.split(";")) {
             Lexer lexer = new Lexer(line);
-            List<Token> tokens = lexer.getTokens();
+            TokenSequence tokens = new TokenSequence(lexer.getTokens());
             if (tokens.size() == 0) continue;
-            this.tokens.add(tokens);
+            lines.add(tokens);
         }
     }
 }
