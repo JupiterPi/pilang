@@ -14,6 +14,18 @@ public class DeclareVariableInstruction extends Instruction {
         this.value = value;
     }
 
+    public DataType getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Value getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return "DeclareVariableInstruction{" +
