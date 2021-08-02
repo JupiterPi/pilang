@@ -8,19 +8,23 @@ public class Variable extends Value {
     private DataType type;
     private String value;
 
-    public Variable(String name, Value value) {
+    public Variable(Scope scope, String name, Value value) {
         this.name = name;
-        this.type = value.getType();
-        this.value = value.get();
+        this.type = value.getType(scope);
+        this.value = value.get(scope);
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
-    public DataType getType() {
+    public DataType getType(Scope scope) {
         return type;
     }
 
     @Override
-    public String get() {
+    public String get(Scope scope) {
         return value;
     }
 

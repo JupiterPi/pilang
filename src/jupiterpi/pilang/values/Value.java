@@ -1,10 +1,12 @@
 package jupiterpi.pilang.values;
 
-public abstract class Value {
-    public abstract DataType getType();
-    public abstract String get();
+import jupiterpi.pilang.script.runtime.Scope;
 
-    public int getInteger() {
-        return Integer.parseInt(get());
+public abstract class Value {
+    public abstract DataType getType(Scope scope);
+    public abstract String get(Scope scope);
+
+    public int getInteger(Scope scope) {
+        return Integer.parseInt(get(scope));
     }
 }

@@ -1,33 +1,37 @@
 package jupiterpi.pilang.values;
 
+import jupiterpi.pilang.script.runtime.Scope;
+
 public class Operation extends Value {
     private String operator;
     private Value a;
     private Value b;
-    private DataType type;
 
     public Operation(Value a, String operator, Value b) {
         this.operator = operator;
-        if (a.getType().equals(b.getType())) {
-            this.a = a;
-            this.b = b;
-            type = a.getType();
-        } else new Exception("mismatching types: a: " + a.getType() + "b: " + b.getType()).printStackTrace();
+        this.a = a;
+        this.b = b;
     }
 
     @Override
-    public String get() {
-        return Integer.toString(calculate());
+    public String get(Scope scope) {
+        checkTypes(scope);
+        return Integer.toString(calculate(scope));
     }
 
     @Override
-    public DataType getType() {
-        return type;
+    public DataType getType(Scope scope) {
+        checkTypes(scope);
+        return a.getType(scope);
     }
 
-    private int calculate() {
-        int a = this.a.getInteger();
-        int b = this.b.getInteger();
+    private void checkTypes(Scope scope) {
+        if (!(a.getType(scope).equals(b.getType(scope)))) new Exception("mismatching types: a: " + a.getType(scope) + "b: " + b.getType(scope)).printStackTrace();
+    }
+
+    private int calculate(Scope scope) {
+        int a = this.a.getInteger(scope);
+        int b = this.b.getInteger(scope);
         switch (operator) {
             case "+": return a + b;
             case "-": return a - b;

@@ -1,13 +1,11 @@
 package jupiterpi.pilang;
 
-import jupiterpi.pilang.values.parsing.Expression;
+import jupiterpi.pilang.script.Snippet;
+import jupiterpi.tools.files.Path;
 
 public class Main {
     public static void main(String[] args) {
-        String expr = "2 + 5 * 3";
-        System.out.println(expr);
-        Expression expression = new Expression(expr);
-        System.out.println(expression.getOperation().toString());
-        System.out.println(expression.get());
+        Snippet snippet = Snippet.readFromFile(Path.getRunningDirectory().subdir("scripts").file("test1.pi"));
+        snippet.execute();
     }
 }

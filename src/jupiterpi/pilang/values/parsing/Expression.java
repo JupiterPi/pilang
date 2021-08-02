@@ -3,10 +3,8 @@ package jupiterpi.pilang.values.parsing;
 import jupiterpi.pilang.script.lexer.Lexer;
 import jupiterpi.pilang.script.lexer.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
-import jupiterpi.pilang.values.DataType;
-import jupiterpi.pilang.values.Literal;
-import jupiterpi.pilang.values.Operation;
-import jupiterpi.pilang.values.Value;
+import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.values.*;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 
 import static jupiterpi.pilang.script.lexer.Token.Type.*;
@@ -25,13 +23,13 @@ public class Expression extends Value {
     }
 
     @Override
-    public String get() {
-        return operation.get();
+    public String get(Scope scope) {
+        return operation.get(scope);
     }
 
     @Override
-    public DataType getType() {
-        return operation.getType();
+    public DataType getType(Scope scope) {
+        return operation.getType(scope);
     }
 
     public Operation getOperation() {
@@ -57,9 +55,13 @@ public class Expression extends Value {
                 } else {
                     new Exception("no space for operator: " + t.getContent()).printStackTrace();
                 }
+            } else if (t.getType() == IDENTIFIER) {
+                appendValue(new VariableReference(t.getContent()));
             }
             flushOperation();
         }
+        /*System.out.println(a);
+        System.out.println(b);*/
         return (Operation) a;
     }
 

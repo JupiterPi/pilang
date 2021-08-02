@@ -1,5 +1,7 @@
 package jupiterpi.pilang.script.instructions;
 
+import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.script.runtime.Variable;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 
@@ -14,16 +16,10 @@ public class DeclareVariableInstruction extends Instruction {
         this.value = value;
     }
 
-    public DataType getType() {
-        return type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Value getValue() {
-        return value;
+    @Override
+    public void execute(Scope scope) {
+        Variable variable = new Variable(scope, name, value);
+        scope.getVariables().add(variable);
     }
 
     @Override

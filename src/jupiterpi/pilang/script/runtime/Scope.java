@@ -1,6 +1,5 @@
 package jupiterpi.pilang.script.runtime;
 
-import jupiterpi.pilang.script.instructions.DeclareVariableInstruction;
 import jupiterpi.pilang.script.instructions.Instruction;
 
 import java.util.ArrayList;
@@ -11,11 +10,7 @@ public class Scope {
 
     public void execute(List<Instruction> instructions) {
         for (Instruction instruction : instructions) {
-            if (instruction instanceof DeclareVariableInstruction) {
-                DeclareVariableInstruction instr = (DeclareVariableInstruction) instruction;
-                Variable variable = new Variable(instr.getName(), instr.getValue());
-                variables.add(variable);
-            }
+            instruction.execute(this);
         }
     }
 

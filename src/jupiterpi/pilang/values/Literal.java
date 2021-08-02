@@ -1,5 +1,7 @@
 package jupiterpi.pilang.values;
 
+import jupiterpi.pilang.script.runtime.Scope;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,12 +24,12 @@ public class Literal extends Value {
     }
 
     @Override
-    public DataType getType() {
+    public DataType getType(Scope scope) {
         return type;
     }
 
     @Override
-    public String get() {
+    public String get(Scope scope) {
         return value;
     }
 
