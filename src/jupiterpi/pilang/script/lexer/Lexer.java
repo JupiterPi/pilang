@@ -4,7 +4,6 @@ import jupiterpi.pilang.script.lexer.Token.Type;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.values.DataType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class Lexer {
     // character types
     private final List<String> operators = Arrays.asList("+-*/".split(""));
     private final List<String> numbers = Arrays.asList("0123456789".split(""));
-    private final List<String> whitespaces = Arrays.asList(" ".split(""));
+    private final List<String> whitespaces = Arrays.asList(" \t\n\r".split(""));
     private final List<String> text = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
 
     // buffer

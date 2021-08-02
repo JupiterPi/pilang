@@ -1,30 +1,26 @@
 package jupiterpi.pilang.values.parsing;
 
+import jupiterpi.pilang.script.lexer.Lexer;
+import jupiterpi.pilang.script.lexer.Token;
+import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Literal;
 import jupiterpi.pilang.values.Operation;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 
-import java.util.List;
-
-import static jupiterpi.pilang.values.parsing.Token.Type.*;
+import static jupiterpi.pilang.script.lexer.Token.Type.*;
 
 public class Expression extends Value {
     private final Operation operation;
 
     public Expression(String expr) {
-        ExpressionLexer lexer = new ExpressionLexer(expr);
-        List<Token> tokens = lexer.getTokens();
+        Lexer lexer = new Lexer(expr);
+        TokenSequence tokens = lexer.getTokens();
 
         ExpressionPrecedencer precedencer = new ExpressionPrecedencer(tokens);
         tokens = precedencer.getTokens();
 
-        if (tokens.size() == 1) {
-            if (tokens.get(0).getType() == EXPRESSION) {
-
-            }
-        }
         operation = parseTokens(tokens);
     }
 
@@ -49,7 +45,7 @@ public class Expression extends Value {
     private String operator = null;
     private Value b = null;
 
-    private Operation parseTokens(List<Token> tokens) {
+    private Operation parseTokens(TokenSequence tokens) {
         for (Token t : tokens) {
             if (t.getType() == EXPRESSION) {
                 appendValue(new Expression(t.getContent()));

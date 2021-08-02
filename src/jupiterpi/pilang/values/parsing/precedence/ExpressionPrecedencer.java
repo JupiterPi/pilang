@@ -1,16 +1,17 @@
 package jupiterpi.pilang.values.parsing.precedence;
 
-import jupiterpi.pilang.values.parsing.Token;
+import jupiterpi.pilang.script.lexer.Token;
+import jupiterpi.pilang.script.parser.TokenSequence;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static jupiterpi.pilang.values.parsing.Token.Type.OPERATOR;
+import static jupiterpi.pilang.script.lexer.Token.Type.OPERATOR;
 
 public class ExpressionPrecedencer {
-    private List<Token> tokens;
+    private TokenSequence tokens;
 
-    public ExpressionPrecedencer(List<Token> tokens) {
+    public ExpressionPrecedencer(TokenSequence tokens) {
         generateItemsList(tokens);
         determinePrecedence();
         if (isOnlyPrecedence()) {
@@ -20,7 +21,7 @@ public class ExpressionPrecedencer {
         }
     }
 
-    public List<Token> getTokens() {
+    public TokenSequence getTokens() {
         return tokens;
     }
 
@@ -28,7 +29,7 @@ public class ExpressionPrecedencer {
 
     private List<Item> items = new ArrayList<>();
 
-    private void generateItemsList(List<Token> tokens) {
+    private void generateItemsList(TokenSequence tokens) {
         for (Token token : tokens) {
             if (token.getType() == OPERATOR) {
                 items.add(new Operator(token));
@@ -65,18 +66,18 @@ public class ExpressionPrecedencer {
         return true;
     }
 
-    private List<Token> generateNewTokens() {
-        List<Token> tokens = new ArrayList<>();
+    private TokenSequence generateNewTokens() {
+        TokenSequence tokens = new TokenSequence();
 
         boolean insidePrecedence = false;
-        List<Token> buffer = new ArrayList<>();
+        TokenSequence buffer = new TokenSequence();
         for (Item item : items) {
             if (insidePrecedence) {
                 if (item.hasPrecedence()) {
                     buffer.add(item.getToken());
                 } else {
                     tokens.add(Token.expressionFromTokens(buffer));
-                    buffer = new ArrayList<>();
+                    buffer = new TokenSequence();
                     tokens.add(item.getToken());
                     insidePrecedence = false;
                 }
