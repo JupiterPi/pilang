@@ -10,7 +10,7 @@ import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 import static jupiterpi.pilang.script.lexer.Token.Type.*;
 
 public class Expression extends Value {
-    private final Operation operation;
+    private final Value value;
 
     public Expression(String expr) {
         Lexer lexer = new Lexer(expr);
@@ -19,21 +19,17 @@ public class Expression extends Value {
         ExpressionPrecedencer precedencer = new ExpressionPrecedencer(tokens);
         tokens = precedencer.getTokens();
 
-        operation = parseTokens(tokens);
+        value = parseTokens(tokens);
     }
 
     @Override
     public String get(Scope scope) {
-        return operation.get(scope);
+        return value.get(scope);
     }
 
     @Override
     public DataType getType(Scope scope) {
-        return operation.getType(scope);
-    }
-
-    public Operation getOperation() {
-        return operation;
+        return value.getType(scope);
     }
 
     /* parser */
@@ -43,7 +39,7 @@ public class Expression extends Value {
     private String operator = null;
     private Value b = null;
 
-    private Operation parseTokens(TokenSequence tokens) {
+    private Value parseTokens(TokenSequence tokens) {
         for (Token t : tokens) {
             if (t.getType() == EXPRESSION) {
                 appendValue(new Expression(t.getContent()));
@@ -60,9 +56,7 @@ public class Expression extends Value {
             }
             flushOperation();
         }
-        /*System.out.println(a);
-        System.out.println(b);*/
-        return (Operation) a;
+        return a;
     }
 
     private void flushOperation() {
@@ -88,7 +82,7 @@ public class Expression extends Value {
     @Override
     public String toString() {
         return "Expression{" +
-                "operation=" + operation +
+                "operation=" + value +
                 '}';
     }
 }
