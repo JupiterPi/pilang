@@ -1,7 +1,7 @@
 package jupiterpi.pilang.script;
 
 import jupiterpi.tools.files.Path;
-import jupiterpi.tools.files.WrongPathTypeException;
+import jupiterpi.tools.files.TextFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +11,18 @@ public class Application {
 
     public Application(List<Path> files) {
         for (Path file : files) {
-            scripts.add(Script.readFromFile(file));
+            scripts.add(Script.newFromFile(file));
         }
     }
 
-    @Deprecated
-    public static Application fromDirectory(Path dir) {
-        try {
-            return new Application(dir.subfiles());
-        } catch (WrongPathTypeException e) {
-            new Exception("must be a directory with script files: " + dir).printStackTrace();
-            return null;
+    public static Application newFromManifestFile(Path dir, String manifestFile) {
+        TextFile file = new TextFile(dir.copy().file(manifestFile));
+        List<Path> files = new ArrayList<>();
+        for (String line : file.getFile()) {
+            if (line.isEmpty()) continue;
+            files.add(dir.copy().file(line));
         }
+        return new Application(files);
     }
 
     /* execute */

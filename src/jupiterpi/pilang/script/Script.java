@@ -26,7 +26,7 @@ public class Script extends Scope {
         generateInstructions(content);
     }
 
-    public static Script readFromFile(Path file) {
+    public static Script newFromFile(Path file) {
         String filename = file.getFileName();
         if (filename.endsWith(".pi")) filename = filename.substring(0, filename.length() - ".pi".length());
         String content = new TextFile(file).getFileForOutput();
