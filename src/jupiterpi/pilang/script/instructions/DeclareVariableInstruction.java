@@ -19,7 +19,7 @@ public class DeclareVariableInstruction extends Instruction {
     @Override
     public void execute(Scope scope) {
         Variable variable = new Variable(scope, name, value);
-        scope.getVariables().add(variable);
+        scope.addVariable(variable);
     }
 
     @Override

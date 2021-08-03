@@ -11,11 +11,9 @@ public class VariableReference extends Value {
     }
 
     private Variable getVariable(Scope scope) {
-        for (Variable variable : scope.getVariables()) {
-            if (variable.getName().equals(variableName)) return variable;
-        }
-        new Exception("variable not found: " + variableName).printStackTrace();
-        return null;
+        Variable variable = scope.getVariable(variableName);
+        if (variable == null) new Exception("variable not found: " + variableName).printStackTrace();
+        return variable;
     }
 
     @Override

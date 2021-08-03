@@ -24,9 +24,10 @@ public class Lexer {
 
     // character types
     private final List<String> operators = Arrays.asList("+-*/".split(""));
-    private final List<String> numbers = Arrays.asList("0123456789".split(""));
+    private final List<String> literal = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789".split(""));
+    private final List<String> literalNumberStart = Arrays.asList("0123456789".split(""));
+    private final List<String> literalTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
     private final List<String> whitespaces = Arrays.asList(" \t\n\r".split(""));
-    private final List<String> text = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
 
     // buffer
     private String buffer = null;
@@ -98,8 +99,7 @@ public class Lexer {
 
     private String getCharacterType(String c) {
         if (listContains(operators, c)) return "operator";
-        if (listContains(numbers, c)) return "literal";
-        if (listContains(text, c)) return "text";
+        if (listContains(literal, c)) return "literal";
         if (listContains(whitespaces, c)) return "whitespace";
         new Exception("invalid character: " + c).printStackTrace();
         return null;
@@ -120,13 +120,14 @@ public class Lexer {
                 type = OPERATOR;
                 break;
             case "literal":
-                type = LITERAL;
-                break;
-            case "text":
-                if (DataType.from(buffer) != null) {
-                    type = TYPE;
+                if (listContains(literalNumberStart, buffer.substring(0, 1))) {
+                    type = LITERAL;
                 } else {
-                    type = IDENTIFIER;
+                    if (DataType.from(buffer) != null) {
+                        type = TYPE;
+                    } else {
+                        type = IDENTIFIER;
+                    }
                 }
                 break;
             case "expression":

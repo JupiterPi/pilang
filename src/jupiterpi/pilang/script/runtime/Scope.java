@@ -15,6 +15,17 @@ public class Scope {
     }
 
     public List<Variable> getVariables() {
-        return variables;
+        return new ArrayList<>(variables);
+    }
+
+    public Variable getVariable(String name) {
+        for (Variable variable : variables) {
+            if (variable.getName().equals(name)) return variable;
+        }
+        return null;
+    }
+
+    public void addVariable(Variable variable) {
+        variables.add(variable);
     }
 }
