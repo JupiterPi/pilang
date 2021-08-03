@@ -1,2 +1,3 @@
-# pilang
-Pi programming language. 
+# pilang - Pi Programming Language
+
+Coming soon...
