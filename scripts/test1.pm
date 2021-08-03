@@ -1,2 +1,1 @@
-test1a.pi
-test1b.pi
+test1c.pi

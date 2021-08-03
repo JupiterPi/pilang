@@ -28,6 +28,10 @@ public class Variable extends Value {
         return value;
     }
 
+    public void set(Scope scope, Value value) {
+        this.value = value.get(scope);
+    }
+
     @Override
     public String toString() {
         return "Variable{" +
