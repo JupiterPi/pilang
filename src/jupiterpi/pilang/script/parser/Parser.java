@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script.parser;
 
 import jupiterpi.pilang.script.instructions.DeclareVariableInstruction;
+import jupiterpi.pilang.script.instructions.ImportScriptInstruction;
 import jupiterpi.pilang.script.instructions.Instruction;
 import jupiterpi.pilang.script.instructions.ReassignVariableInstruction;
 import jupiterpi.pilang.script.lexer.Token;
@@ -25,8 +26,11 @@ public class Parser {
     /* parser */
 
     private void parseInstruction(List<TokenSequence> lines) {
+        boolean insideHeader = true;
         for (TokenSequence line : lines) {
             Instruction instruction = null;
+
+            // DeclareVariable, ReassignVariable
             if (line.contains(new Token(Token.Type.ASSIGN))) {
                 List<TokenSequence> parts = line.split(new Token(Token.Type.ASSIGN));
 
@@ -41,7 +45,22 @@ public class Parser {
                 } else {
                     instruction = new ReassignVariableInstruction(name, value);
                 }
+
+                insideHeader = false;
             }
+
+            // ImportScript
+            if (line.get(0).getType() == Token.Type.NOTICE || line.get(0).getType() == Token.Type.INTEGRATE) {
+                if (!insideHeader) {
+                    new Exception("import script instruction outside header: " + line.backToString()).printStackTrace();
+                    continue;
+                }
+
+                boolean integrate = line.get(0).getType() == Token.Type.INTEGRATE;
+                String scriptName = line.get(1).getContent();
+                instruction = new ImportScriptInstruction(integrate, scriptName);
+            }
+
             if (instruction == null) new Exception("invalid line: " + line.backToString()).printStackTrace();
             instructions.add(instruction);
         }

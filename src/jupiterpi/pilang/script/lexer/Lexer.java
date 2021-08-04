@@ -1,9 +1,12 @@
 package jupiterpi.pilang.script.lexer;
 
+import jupiterpi.pilang.script.instructions.Instruction;
 import jupiterpi.pilang.script.lexer.Token.Type;
+import jupiterpi.pilang.script.parser.Parser;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.values.DataType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,8 +60,6 @@ public class Lexer {
                 bracketLevel--;
                 if (bracketLevel == 0) {
                     flushBuffer();
-                    buffer = null;
-                    bufferType = null;
                     continue;
                 }
             }
@@ -77,8 +78,6 @@ public class Lexer {
             String cType = getCharacterType(c);
             if (cType == "whitespace") {
                 flushBuffer();
-                buffer = null;
-                bufferType = null;
             } else {
                 if (buffer == null) {
                     buffer = c;
@@ -126,7 +125,11 @@ public class Lexer {
                     if (DataType.from(buffer) != null) {
                         type = TYPE;
                     } else {
-                        type = IDENTIFIER;
+                        switch (buffer) {
+                            case "notice": type = NOTICE; break;
+                            case "integrate": type = INTEGRATE; break;
+                            default: type = IDENTIFIER;
+                        }
                     }
                 }
                 break;
@@ -138,5 +141,20 @@ public class Lexer {
                 break;
         }
         tokens.add(new Token(type, buffer));
+
+        buffer = null;
+        bufferType = null;
+    }
+
+    public static void main(String[] args) {
+        Lexer lexer = new Lexer("integrate arr;");
+        System.out.println(lexer.getTokens());
+
+        List<TokenSequence> lines = new ArrayList<>();
+        lines.add(lexer.getTokens());
+        Parser parser = new Parser(lines);
+        for (Instruction instruction : parser.getInstructions()) {
+            System.out.println(instruction);
+        }
     }
 }

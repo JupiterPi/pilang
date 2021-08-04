@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script.parser;
 
 import jupiterpi.pilang.script.lexer.Token;
+import jupiterpi.tools.util.AppendingList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,10 +36,10 @@ public class TokenSequence extends ArrayList<Token> {
     }
 
     public String backToString() {
-        String str = "";
+        AppendingList str = new AppendingList();
         for (Token token : this) {
-            str += token.backToString();
+            str.add(token.backToString());
         }
-        return str;
+        return str.render(" ");
     }
 }

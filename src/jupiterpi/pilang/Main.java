@@ -5,7 +5,7 @@ import jupiterpi.tools.files.Path;
 
 public class Main {
     public static void main(String[] args) {
-        Application app = Application.newFromManifestFile(Path.getRunningDirectory().subdir("scripts"), "test1.pm");
+        Application app = Application.newFromManifestFile(Path.getRunningDirectory().subdir("scripts"), "test2.pm");
         app.run();
     }
 }

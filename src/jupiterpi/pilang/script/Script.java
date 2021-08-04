@@ -33,7 +33,9 @@ public class Script extends Scope {
         return new Script(filename, content);
     }
 
-    /* generate instructions */
+    //region generate instructions
+
+    private List<Instruction> instructions;
 
     private void generateInstructions(String content) {
         List<TokenSequence> lines = applyLexer(content);
@@ -56,11 +58,13 @@ public class Script extends Scope {
         return parser.getInstructions();
     }
 
+    //endregion
+
     /* execute */
 
-    private List<Instruction> instructions;
-
     private List<Script> availableScripts;
+    private List<Script> noticedScripts = new ArrayList<>();
+    private List<Script> integratedScripts = new ArrayList<>();
 
     public void run(List<Script> availableScripts) {
         this.availableScripts = new ArrayList<>(availableScripts);
@@ -76,12 +80,48 @@ public class Script extends Scope {
     public Variable getVariable(String name) {
         if (name.contains(".")) {
             String[] parts = name.split("\\.");
-            for (Script script : availableScripts) {
+            if (parts[0].equals("self")) {
+                return getLocalVariable(parts[1]);
+            }
+            for (Script script : noticedScripts) {
                 if (script.getName().equals(parts[0])) {
                     return script.getVariable(parts[1]);
                 }
             }
         }
+        Variable variable = getLocalVariable(name);
+        if (variable != null) {
+            return variable;
+        } else {
+            for (Script integratedScript : integratedScripts) {
+                Variable v = integratedScript.getLocalVariable(name);
+                if (v != null) return v;
+            }
+        }
+
+        new Exception("couldn't find variable " + name).printStackTrace();
+        return null;
+    }
+    private Variable getLocalVariable(String name) {
         return super.getVariable(name);
+    }
+
+    public void importScript(boolean integrate, String scriptName) {
+        for (Script availableScript : availableScripts) {
+            if (availableScript.getName().equals(scriptName)) {
+                if (integrate) addScript(integratedScripts, "integrated", availableScript);
+                addScript(noticedScripts, "noticed", availableScript);
+                return;
+            }
+        }
+        new Exception("tried to import script " + scriptName + ", but it doesn't exist!").printStackTrace();
+    }
+    private void addScript(List<Script> list, String listName, Script script) {
+        for (Script s : list) {
+            if (s.getName().equals(script.getName())) {
+                new Exception("tried to add script " + script.getName() + " to " + listName + " scripts, but it's already there!").printStackTrace(); return;
+            }
+        }
+        list.add(script);
     }
 }

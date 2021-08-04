@@ -1,0 +1,7 @@
+integrate test2a;
+
+int a = test2a.a;
+a = 3;
+int test2aa = test2a.a;
+int test2ba = a;
+int b1 = a;
