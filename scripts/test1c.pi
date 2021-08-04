@@ -1,2 +1,5 @@
-int a = 5 + 3;
-a = a + 2;
+float zehn = 22.4 * 0.3;
+float vierzehn = zehn + 4.0;
+
+float test = 1.0;
+test = 3;

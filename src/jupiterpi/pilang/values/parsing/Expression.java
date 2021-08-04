@@ -82,7 +82,7 @@ public class Expression extends Value {
     @Override
     public String toString() {
         return "Expression{" +
-                "operation=" + value +
+                "" + value +
                 '}';
     }
 }

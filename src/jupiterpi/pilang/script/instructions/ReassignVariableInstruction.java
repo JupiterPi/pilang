@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script.instructions;
 
 import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.script.runtime.Variable;
 import jupiterpi.pilang.values.Value;
 
 public class ReassignVariableInstruction extends Instruction {
@@ -14,7 +15,12 @@ public class ReassignVariableInstruction extends Instruction {
 
     @Override
     public void execute(Scope scope) {
-        scope.getVariable(name).set(scope, value);
+        Variable variable = scope.getVariable(name);
+        if (variable.getType(scope).equals(value.getType(scope))) {
+            variable.set(scope, value);
+        } else {
+            new Exception("mismatching types: variable " + variable.getName() + ": " + variable.getType(scope) + ", new value: (" + value.getType(scope) + ") " + value).printStackTrace();
+        }
     }
 
     @Override

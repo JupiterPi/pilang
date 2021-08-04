@@ -18,8 +18,12 @@ public class DeclareVariableInstruction extends Instruction {
 
     @Override
     public void execute(Scope scope) {
-        Variable variable = new Variable(scope, name, value);
-        scope.addVariable(variable);
+        if (type.equals(value.getType(scope))) {
+            Variable variable = new Variable(scope, name, value);
+            scope.addVariable(variable);
+        } else {
+            new Exception("mismatching types: specified: " + type + ", value: (" + value.getType(scope) + ") " + value).printStackTrace();
+        }
     }
 
     @Override

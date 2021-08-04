@@ -15,8 +15,14 @@ public class Operation extends Value {
 
     @Override
     public String get(Scope scope) {
-        checkTypes(scope);
-        return Integer.toString(calculate(scope));
+        if (getType(scope).equals(new DataType(DataType.BaseType.INT))) {
+            return Integer.toString((int) calculateNumber(scope));
+        }
+        if (getType(scope).equals(new DataType(DataType.BaseType.FLOAT))) {
+            return Float.toString(calculateNumber(scope));
+        }
+        new Exception("unknown data type: " + a.getType(scope)).printStackTrace();
+        return null;
     }
 
     @Override
@@ -26,12 +32,12 @@ public class Operation extends Value {
     }
 
     private void checkTypes(Scope scope) {
-        if (!(a.getType(scope).equals(b.getType(scope)))) new Exception("mismatching types: a: " + a.getType(scope) + "b: " + b.getType(scope)).printStackTrace();
+        if (!(a.getType(scope).equals(b.getType(scope)))) new Exception("mismatching types: a: " + a.getType(scope) + ", b: " + b.getType(scope)).printStackTrace();
     }
 
-    private int calculate(Scope scope) {
-        int a = this.a.getInteger(scope);
-        int b = this.b.getInteger(scope);
+    private float calculateNumber(Scope scope) {
+        float a = Float.parseFloat(this.a.get(scope));
+        float b = Float.parseFloat(this.b.get(scope));
         switch (operator) {
             case "+": return a + b;
             case "-": return a - b;
