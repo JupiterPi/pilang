@@ -1,12 +1,9 @@
 package jupiterpi.pilang.script.lexer;
 
-import jupiterpi.pilang.script.instructions.Instruction;
 import jupiterpi.pilang.script.lexer.Token.Type;
-import jupiterpi.pilang.script.parser.Parser;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.values.DataType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class Lexer {
     /* lexer */
 
     // character types
-    private final List<String> operators = Arrays.asList("+-*/".split(""));
+    private final List<String> operators = Arrays.asList("+-*/&|=".split(""));
     private final List<String> literal = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789".split(""));
     private final List<String> literalNumberStart = Arrays.asList("0123456789".split(""));
     private final List<String> literalTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
@@ -65,13 +62,6 @@ public class Lexer {
             }
             if (bracketLevel > 0) {
                 buffer += c;
-                continue;
-            }
-
-            if (c.equals("=")) {
-                flushBuffer();
-                buffer = c;
-                bufferType = "assign";
                 continue;
             }
 
@@ -116,7 +106,8 @@ public class Lexer {
         Type type = null;
         switch (bufferType) {
             case "operator":
-                type = OPERATOR;
+                if (buffer.equals("=")) type = ASSIGN;
+                else type = OPERATOR;
                 break;
             case "literal":
                 if (listContains(literalNumberStart, buffer.substring(0, 1))) {
@@ -128,6 +119,7 @@ public class Lexer {
                         switch (buffer) {
                             case "notice": type = NOTICE; break;
                             case "integrate": type = INTEGRATE; break;
+                            case "true": case "false": type = LITERAL; break;
                             default: type = IDENTIFIER;
                         }
                     }
@@ -144,17 +136,5 @@ public class Lexer {
 
         buffer = null;
         bufferType = null;
-    }
-
-    public static void main(String[] args) {
-        Lexer lexer = new Lexer("integrate arr;");
-        System.out.println(lexer.getTokens());
-
-        List<TokenSequence> lines = new ArrayList<>();
-        lines.add(lexer.getTokens());
-        Parser parser = new Parser(lines);
-        for (Instruction instruction : parser.getInstructions()) {
-            System.out.println(instruction);
-        }
     }
 }

@@ -1,0 +1,3 @@
+bool and = true && false;
+bool or = true || false;
+bool equals = 1.0 == 1;

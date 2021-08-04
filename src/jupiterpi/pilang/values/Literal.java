@@ -12,10 +12,14 @@ public class Literal extends Value {
     private String value;
 
     public Literal(String value) {
-        if (value.contains(".")) {
-            type = new DataType(DataType.BaseType.FLOAT);
+        if (listContains(numbers, value.substring(0, 1))) {
+            if (value.contains(".")) {
+                type = new DataType(DataType.BaseType.FLOAT);
+            } else {
+                type = new DataType(DataType.BaseType.INT);
+            }
         } else {
-            type = new DataType(DataType.BaseType.INT);
+            type = new DataType(DataType.BaseType.BOOL);
         }
         this.value = value;
     }

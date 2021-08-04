@@ -2,7 +2,7 @@ package jupiterpi.pilang.values;
 
 public class DataType {
     public enum BaseType {
-        INT, FLOAT
+        INT, FLOAT, BOOL
     }
 
     private BaseType baseType;

@@ -23,4 +23,13 @@ public abstract class Value {
             return 0.0f;
         }
     }
+
+    public boolean getBool(Scope scope) {
+        if (getType(scope).equals(new DataType(DataType.BaseType.FLOAT))) {
+            return Boolean.parseBoolean(get(scope));
+        } else {
+            new Exception(String.format("tried to get bool value of %s %s", getType(scope), get(scope))).printStackTrace();
+            return false;
+        }
+    }
 }
