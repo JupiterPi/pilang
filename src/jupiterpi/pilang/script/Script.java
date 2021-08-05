@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script;
 
 import jupiterpi.pilang.script.instructions.Instruction;
+import jupiterpi.pilang.script.parser.CommentPreprocessor;
 import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.Parser;
 import jupiterpi.pilang.script.parser.TokenSequence;
@@ -44,16 +45,8 @@ public class Script extends Scope {
         instructions = applyParser(lines);
     }
 
-    private String removeComments(String oldContent) {
-        AppendingList content = new AppendingList();
-        for (String line : oldContent.split("\n")) {
-            int index = line.indexOf("//");
-            if (index >= 0) {
-                line = line.substring(0, index);
-            }
-            content.add(line);
-        }
-        return content.render("\n");
+    private String removeComments(String content) {
+        return new CommentPreprocessor(name, content).getContent();
     }
 
     private List<TokenSequence> applyLexer(String content) {
