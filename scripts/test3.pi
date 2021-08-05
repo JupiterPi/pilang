@@ -1,3 +1,4 @@
 bool and = true && false;
 bool or = true || false;
 bool equals = 1.0 == 1;
+int tes = 4;//int test = 3;

@@ -8,6 +8,7 @@ import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;
 import jupiterpi.tools.files.Path;
 import jupiterpi.tools.files.TextFile;
+import jupiterpi.tools.util.AppendingList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,21 @@ public class Script extends Scope {
     private List<Instruction> instructions;
 
     private void generateInstructions(String content) {
+        content = removeComments(content);
         List<TokenSequence> lines = applyLexer(content);
         instructions = applyParser(lines);
+    }
+
+    private String removeComments(String oldContent) {
+        AppendingList content = new AppendingList();
+        for (String line : oldContent.split("\n")) {
+            int index = line.indexOf("//");
+            if (index >= 0) {
+                line = line.substring(0, index);
+            }
+            content.add(line);
+        }
+        return content.render("\n");
     }
 
     private List<TokenSequence> applyLexer(String content) {
