@@ -4,6 +4,7 @@ import jupiterpi.pilang.script.lexer.Token.Type;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.values.DataType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,11 +29,16 @@ public class Lexer {
     private final List<String> literalNumberStart = Arrays.asList("0123456789".split(""));
     private final List<String> literalTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
     private final List<String> whitespaces = Arrays.asList(" \t\n\r".split(""));
+    private final List<String> brackets = Arrays.asList("()[]".split(""));
 
     // buffer
     private String buffer = null;
     private String bufferType = null;
-    private int bracketLevel = 0;
+    private List<BracketType> bracketStack = new ArrayList<>();
+
+    private enum BracketType {
+        PARENTHESES, BRACKETS
+    }
 
     private TokenSequence generateTokens(String expr) {
         expr = expr + ";";
@@ -42,25 +48,31 @@ public class Lexer {
                 continue;
             }
 
-            if (c.equals("(")) {
-                if (bracketLevel == 0) {
-                    flushBuffer();
-                    buffer = "";
-                    bufferType = "expression";
-
-                    bracketLevel++;
-                    continue;
+            if (listContains(brackets, c)) {
+                int index = listIndexOf(brackets, c);
+                if ((index+1) % 2 == 1) { // opening bracket
+                    BracketType type = c.equals("(") ? BracketType.PARENTHESES : BracketType.BRACKETS;
+                    bracketStack.add(type);
+                    if (bracketStack.size() == 1) {
+                        flushBuffer();
+                        buffer = "";
+                        bufferType = type.toString();
+                        continue;
+                    }
+                } else { // closing bracket
+                    BracketType type = c.equals(")") ? BracketType.PARENTHESES : BracketType.BRACKETS;
+                    if (bracketStack.get(bracketStack.size()-1) == type) {
+                        bracketStack.remove(bracketStack.size()-1);
+                    } else {
+                        new Exception("closing " + type + " bracket inside " + bracketStack.get(bracketStack.size()-1)).printStackTrace();
+                    }
+                    if (bracketStack.size() == 0) {
+                        flushBuffer();
+                        continue;
+                    }
                 }
-                bracketLevel++;
             }
-            if (c.equals(")")) {
-                bracketLevel--;
-                if (bracketLevel == 0) {
-                    flushBuffer();
-                    continue;
-                }
-            }
-            if (bracketLevel > 0) {
+            if (bracketStack.size() > 0) {
                 buffer += c;
                 continue;
             }
@@ -100,6 +112,12 @@ public class Lexer {
         }
         return false;
     }
+    private int listIndexOf(List<String> list, String c) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals(c)) return i;
+        }
+        return -1;
+    }
 
     private void flushBuffer() {
         if (buffer == null || buffer.isEmpty()) return;
@@ -125,8 +143,11 @@ public class Lexer {
                     }
                 }
                 break;
-            case "expression":
+            case "PARENTHESES":
                 type = EXPRESSION;
+                break;
+            case "BRACKETS":
+                type = BRACKET_EXPRESSION;
                 break;
             case "assign":
                 type = ASSIGN;

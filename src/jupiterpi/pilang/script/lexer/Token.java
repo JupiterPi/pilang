@@ -6,7 +6,7 @@ import static jupiterpi.pilang.script.lexer.Token.Type.EXPRESSION;
 
 public class Token {
     public enum Type {
-        LITERAL, OPERATOR, EXPRESSION,
+        LITERAL, OPERATOR, EXPRESSION, BRACKET_EXPRESSION,
         TYPE, ASSIGN, IDENTIFIER,
         NOTICE, INTEGRATE
     }
