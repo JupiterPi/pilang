@@ -1,8 +1,6 @@
-package jupiterpi.pilang.script.lexer;
+package jupiterpi.pilang.script.parser;
 
-import jupiterpi.pilang.script.parser.TokenSequence;
-
-import static jupiterpi.pilang.script.lexer.Token.Type.EXPRESSION;
+import static jupiterpi.pilang.script.parser.Token.Type.EXPRESSION;
 
 public class Token {
     public enum Type {

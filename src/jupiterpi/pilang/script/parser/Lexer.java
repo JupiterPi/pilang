@@ -1,14 +1,13 @@
-package jupiterpi.pilang.script.lexer;
+package jupiterpi.pilang.script.parser;
 
-import jupiterpi.pilang.script.lexer.Token.Type;
-import jupiterpi.pilang.script.parser.TokenSequence;
+import jupiterpi.pilang.script.parser.Token.Type;
 import jupiterpi.pilang.values.DataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static jupiterpi.pilang.script.lexer.Token.Type.*;
+import static jupiterpi.pilang.script.parser.Token.Type.*;
 
 public class Lexer {
     private TokenSequence tokens = new TokenSequence();

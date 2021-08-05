@@ -1,6 +1,6 @@
 package jupiterpi.pilang.values.parsing.precedence;
 
-import jupiterpi.pilang.script.lexer.Token;
+import jupiterpi.pilang.script.parser.Token;
 
 public class Operator implements Item {
     private Token token;

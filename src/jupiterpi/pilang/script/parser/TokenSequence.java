@@ -1,6 +1,5 @@
 package jupiterpi.pilang.script.parser;
 
-import jupiterpi.pilang.script.lexer.Token;
 import jupiterpi.tools.util.AppendingList;
 
 import java.util.ArrayList;

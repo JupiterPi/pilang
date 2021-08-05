@@ -1,13 +1,13 @@
 package jupiterpi.pilang.values.parsing;
 
-import jupiterpi.pilang.script.lexer.Lexer;
-import jupiterpi.pilang.script.lexer.Token;
+import jupiterpi.pilang.script.parser.Lexer;
+import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.*;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 
-import static jupiterpi.pilang.script.lexer.Token.Type.*;
+import static jupiterpi.pilang.script.parser.Token.Type.*;
 
 public class Expression extends Value {
     private final Value value;

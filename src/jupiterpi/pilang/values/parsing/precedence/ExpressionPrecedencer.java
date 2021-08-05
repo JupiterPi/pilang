@@ -1,12 +1,12 @@
 package jupiterpi.pilang.values.parsing.precedence;
 
-import jupiterpi.pilang.script.lexer.Token;
+import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static jupiterpi.pilang.script.lexer.Token.Type.OPERATOR;
+import static jupiterpi.pilang.script.parser.Token.Type.OPERATOR;
 
 public class ExpressionPrecedencer {
     private TokenSequence tokens;
