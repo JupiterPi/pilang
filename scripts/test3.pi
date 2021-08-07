@@ -1,4 +1,10 @@
+notice debug;
+
 bool and = true && false;
 bool or = true || false;
 bool equals = 1.0 == 1;
 int tes = 4;//int test = 3;
+
+debug.out_int = 69;
+debug.out_float = 3.14;
+debug.out_bool = true;

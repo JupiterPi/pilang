@@ -24,9 +24,9 @@ public class Lexer {
 
     // character types
     private final List<String> operators = Arrays.asList("+-*/&|=".split(""));
-    private final List<String> literal = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789".split(""));
+    private final List<String> literal = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789".split(""));
     private final List<String> literalNumberStart = Arrays.asList("0123456789".split(""));
-    private final List<String> literalTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""));
+    private final List<String> literalTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(""));
     private final List<String> whitespaces = Arrays.asList(" \t\n\r".split(""));
     private final List<String> brackets = Arrays.asList("()[]".split(""));
 

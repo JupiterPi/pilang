@@ -1,5 +1,6 @@
 package jupiterpi.pilang.script;
 
+import jupiterpi.pilang.script.nativescripts.NativeScript;
 import jupiterpi.tools.files.Path;
 import jupiterpi.tools.files.TextFile;
 
@@ -9,20 +10,21 @@ import java.util.List;
 public class Application {
     private List<Script> scripts = new ArrayList<>();
 
-    public Application(List<Path> files) {
-        for (Path file : files) {
-            scripts.add(Script.newFromFile(file));
-        }
-    }
-
-    public static Application newFromManifestFile(Path dir, String manifestFile) {
-        TextFile file = new TextFile(dir.copy().file(manifestFile));
-        List<Path> files = new ArrayList<>();
-        for (String line : file.getFile()) {
+    public Application(Path dir, String manifestFile) {
+        TextFile manifest = new TextFile(dir.copy().file(manifestFile));
+        for (String line : manifest.getFile()) {
             if (line.isEmpty()) continue;
-            files.add(dir.copy().file(line));
+
+            Path file = dir.copy().file(line);
+            String filename = file.getFileName();
+            if (filename.endsWith(".pi")) filename = filename.substring(0, filename.length() - ".pi".length());
+            try {
+                String content = new TextFile(file, false).getFileForOutput();
+                scripts.add(new Script(filename, content));
+            } catch (TextFile.DoesNotExistException ignored) {
+                scripts.add(NativeScript.getNativeScript(line));
+            }
         }
-        return new Application(files);
     }
 
     /* execute */

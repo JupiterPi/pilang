@@ -7,9 +7,6 @@ import jupiterpi.pilang.script.parser.Parser;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;
-import jupiterpi.tools.files.Path;
-import jupiterpi.tools.files.TextFile;
-import jupiterpi.tools.util.AppendingList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +25,8 @@ public class Script extends Scope {
         generateInstructions(content);
     }
 
-    public static Script newFromFile(Path file) {
-        String filename = file.getFileName();
-        if (filename.endsWith(".pi")) filename = filename.substring(0, filename.length() - ".pi".length());
-        String content = new TextFile(file).getFileForOutput();
-        return new Script(filename, content);
+    public Script(String name) {
+        this.name = name;
     }
 
     //region generate instructions
