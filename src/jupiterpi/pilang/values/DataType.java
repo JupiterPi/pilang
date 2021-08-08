@@ -40,7 +40,6 @@ public class DataType {
     }
 
     public static DataType from(TokenSequence tokens) {
-        System.out.println(tokens);
         BaseType baseType;
         try {
             baseType = BaseType.valueOf(tokens.get(0).getContent().toUpperCase());
@@ -56,8 +55,6 @@ public class DataType {
             }
         }
 
-        System.out.println("DataType from: " + baseType);
-        System.out.println("DataType from: " + specificationStack);
         return new DataType(baseType, specificationStack);
     }
 
@@ -69,6 +66,14 @@ public class DataType {
 
     public List<Specification> getSpecificationStack() {
         return new ArrayList<>(specificationStack);
+    }
+
+    /* modify */
+
+    public DataType asArray() {
+        List<Specification> specificationStack = getSpecificationStack();
+        specificationStack.add(Specification.ARRAY);
+        return new DataType(baseType, specificationStack);
     }
 
     /* clone */
@@ -83,6 +88,10 @@ public class DataType {
     }
 
     /* others */
+
+    public boolean isArray() {
+        return specificationStack.get(specificationStack.size()-1) == Specification.ARRAY;
+    }
 
     @Override
     public boolean equals(Object o) {

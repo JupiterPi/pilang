@@ -40,6 +40,9 @@ public class Lexer {
     }
 
     private TokenSequence generateTokens(String expr) {
+        /*if (expr.equals("[ [1, 2], [3, 4] ]")) new Exception("here").printStackTrace();
+        System.out.println("expr: _" + expr + "_");*/
+
         expr = expr + ";";
         for (String c : expr.split("")) {
             if (c.equals(";")) {
@@ -76,6 +79,14 @@ public class Lexer {
                 continue;
             }
 
+            if (c.equals(",")) {
+                flushBuffer();
+                buffer = ",";
+                bufferType = "comma";
+                flushBuffer();
+                continue;
+            }
+
             String cType = getCharacterType(c);
             if (cType == "whitespace") {
                 flushBuffer();
@@ -94,6 +105,7 @@ public class Lexer {
                 }
             }
         }
+        /*System.out.println("                                  =>      " + tokens);*/
         return tokens;
     }
 
@@ -101,6 +113,7 @@ public class Lexer {
         if (listContains(operators, c)) return "operator";
         if (listContains(literal, c)) return "literal";
         if (listContains(whitespaces, c)) return "whitespace";
+        if (c.equals(",")) return "comma";
         new Exception("invalid character: " + c).printStackTrace();
         return null;
     }
@@ -147,6 +160,9 @@ public class Lexer {
                 break;
             case "BRACKETS":
                 type = BRACKET_EXPRESSION;
+                break;
+            case "comma":
+                type = COMMA;
                 break;
             case "assign":
                 type = ASSIGN;

@@ -36,7 +36,7 @@ public class Parser {
                 TokenSequence head = parts.get(0);
                 TokenSequence expr = parts.get(1);
 
-                Value value = new Expression(expr.backToString());
+                Value value = new Expression(expr);
                 String name = head.get(head.size()-1).getContent();
                 if (head.size() > 1) {
                     DataType type = DataType.from(head.sublist(0, head.size()-1));

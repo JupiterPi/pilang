@@ -11,10 +11,6 @@ public class DeclareVariableInstruction extends Instruction {
     private Value value;
 
     public DeclareVariableInstruction(DataType type, String name, Value value) {
-        System.out.println(type);
-        System.out.println(name);
-        System.out.println(value);
-
         this.type = type;
         this.name = name;
         this.value = value;

@@ -7,15 +7,20 @@ import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.*;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 
-import static jupiterpi.pilang.script.parser.Token.Type.*;
-
 public class Expression extends Value {
-    private final Value value;
+    private Value value;
 
     public Expression(String expr) {
         Lexer lexer = new Lexer(expr);
         TokenSequence tokens = lexer.getTokens();
+        create(tokens);
+    }
 
+    public Expression(TokenSequence tokens) {
+        create(tokens);
+    }
+
+    private void create(TokenSequence tokens) {
         ExpressionPrecedencer precedencer = new ExpressionPrecedencer(tokens);
         tokens = precedencer.getTokens();
 
@@ -41,18 +46,27 @@ public class Expression extends Value {
 
     private Value parseTokens(TokenSequence tokens) {
         for (Token t : tokens) {
-            if (t.getType() == EXPRESSION) {
-                appendValue(new Expression(t.getContent()));
-            } else if (t.getType() == LITERAL) {
-                appendValue(new Literal(t.getContent()));
-            } else if (t.getType() == OPERATOR) {
-                if (operator == null) {
-                    operator = t.getContent();
-                } else {
-                    new Exception("no space for operator: " + t.getContent()).printStackTrace();
-                }
-            } else if (t.getType() == IDENTIFIER) {
-                appendValue(new VariableReference(t.getContent()));
+            switch (t.getType()) {
+                case EXPRESSION:
+                    appendValue(new Expression(t.getContent()));
+                    break;
+                case BRACKET_EXPRESSION:
+                    appendValue(new ArrayLiteral(t.getContent()));
+                    break;
+                case LITERAL:
+                    appendValue(new Literal(t.getContent()));
+                    break;
+                case OPERATOR:
+                    if (operator == null) {
+                        operator = t.getContent();
+                    } else {
+                        new Exception("no space for operator: " + t.getContent()).printStackTrace();
+                    }
+                    break;
+                case IDENTIFIER:
+                    appendValue(new VariableReference(t.getContent()));
+                    break;
+                default: new Exception("invalid token type " + t.getType()).printStackTrace();
             }
             flushOperation();
         }
