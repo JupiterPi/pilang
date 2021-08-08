@@ -42,11 +42,12 @@ public abstract class Value {
     public List<Value> getArray(Scope scope) {
         if (getType(scope).isArray()) {
             List<Value> values = new ArrayList<>();
-            TokenSequence tokens = new Lexer(get(scope)).getTokens();
+            TokenSequence immediateTokens = new Lexer(get(scope)).getTokens();
+            TokenSequence tokens = new Lexer(immediateTokens.get(0).getContent()).getTokens();
             for (TokenSequence item : tokens.split(new Token(Token.Type.COMMA))) {
                 String str = item.backToString();
-                if (str.contains("[")) {
-                    values.add(new ArrayLiteral(str));
+                if (str.startsWith("[")) {
+                    values.add(new ArrayLiteral(str.substring(1, str.length()-1)));
                 } else {
                     values.add(new Literal(str));
                 }

@@ -51,7 +51,15 @@ public class Expression extends Value {
                     appendValue(new Expression(t.getContent()));
                     break;
                 case BRACKET_EXPRESSION:
-                    appendValue(new ArrayLiteral(t.getContent()));
+                    if ((a == null && operator == null && b == null) || (a != null && operator != null && b == null)) { // value is needed
+                        appendValue(new ArrayLiteral(t.getContent()));
+                    } else { // value is given
+                        boolean isA = (b == null);
+                        Value original = isA ? a : b;
+                        Value callWrapper = new ArrayCallWrapper(original, new Expression(t.getContent()));
+                        if (isA) a = callWrapper;
+                        else b = callWrapper;
+                    }
                     break;
                 case LITERAL:
                     appendValue(new Literal(t.getContent()));

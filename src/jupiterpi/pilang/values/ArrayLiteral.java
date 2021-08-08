@@ -33,7 +33,7 @@ public class ArrayLiteral extends Value {
                 }
             }
         }
-        return type.asArray();
+        return type.sp_asArray();
     }
 
     @Override

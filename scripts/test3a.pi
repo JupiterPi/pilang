@@ -1,3 +1,9 @@
+notice debug;
+
 int a = 3;
-int[] b = [42, 69];
-int[][] c = [ [1, 2], [3, 4] ];
+int[] b = [1, 2];
+int[][] c = [b, [3, 4]];
+
+int[] ce = c[1];
+debug.out_int = ce[1];
+debug.out_int = c[1][ (8-6)/2 ];

@@ -68,11 +68,17 @@ public class DataType {
         return new ArrayList<>(specificationStack);
     }
 
-    /* modify */
+    /* modify specification stack */
 
-    public DataType asArray() {
+    public DataType sp_asArray() {
         List<Specification> specificationStack = getSpecificationStack();
         specificationStack.add(Specification.ARRAY);
+        return new DataType(baseType, specificationStack);
+    }
+
+    public DataType sp_of() {
+        List<Specification> specificationStack = getSpecificationStack();
+        specificationStack.remove(specificationStack.size()-1);
         return new DataType(baseType, specificationStack);
     }
 
