@@ -48,6 +48,7 @@ public class Script extends Scope {
         for (String line : content.split(";")) {
             Lexer lexer = new Lexer(line);
             TokenSequence tokens = new TokenSequence(lexer.getTokens());
+            System.out.println(tokens);
             if (tokens.size() == 0) continue;
             lines.add(tokens);
         }

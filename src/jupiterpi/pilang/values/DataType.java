@@ -1,34 +1,64 @@
 package jupiterpi.pilang.values;
 
+import jupiterpi.pilang.script.parser.Token;
+import jupiterpi.pilang.script.parser.TokenSequence;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class DataType {
     public enum BaseType {
         INT, FLOAT, BOOL
     }
 
+    public enum Specification {
+        ARRAY
+    }
+
     private BaseType baseType;
-    private boolean isArray = false;
+    private List<Specification> specificationStack;
 
     public DataType(BaseType baseType) {
         this.baseType = baseType;
+        this.specificationStack = new ArrayList<>();
     }
 
-    public DataType(BaseType baseType, boolean isArray) {
+    public DataType(BaseType baseType, List<Specification> specificationStack) {
         this.baseType = baseType;
-        this.isArray = isArray;
+        this.specificationStack = specificationStack;
     }
 
     public static DataType from(String str) {
-        boolean isArray = false;
-        if (str.endsWith("[]")) {
-            isArray = true;
-            str = str.substring(0, str.length() - 2);
-        }
+        BaseType baseType;
         try {
-            BaseType baseType = BaseType.valueOf(str.toUpperCase());
-            return new DataType(baseType, isArray);
+            baseType = BaseType.valueOf(str.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }
+        return new DataType(baseType);
+    }
+
+    public static DataType from(TokenSequence tokens) {
+        System.out.println(tokens);
+        BaseType baseType;
+        try {
+            baseType = BaseType.valueOf(tokens.get(0).getContent().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+        tokens = tokens.sublist(1);
+
+        List<Specification> specificationStack = new ArrayList<>();
+        for (Token token : tokens) {
+            if (token.getType() == Token.Type.BRACKET_EXPRESSION) {
+                specificationStack.add(Specification.ARRAY);
+            }
+        }
+
+        System.out.println("DataType from: " + baseType);
+        System.out.println("DataType from: " + specificationStack);
+        return new DataType(baseType, specificationStack);
     }
 
     /* getters */
@@ -37,26 +67,19 @@ public class DataType {
         return baseType;
     }
 
-    public boolean isArray() {
-        return isArray;
+    public List<Specification> getSpecificationStack() {
+        return new ArrayList<>(specificationStack);
     }
 
-    /* modify */
-
-    public DataType baseType(BaseType baseType) {
-        return new DataType(baseType, isArray);
-    }
-
-    public DataType isArray(boolean isArray) {
-        return new DataType(baseType, isArray);
-    }
+    /* clone */
 
     public DataType clone() {
-        return new DataType(baseType, isArray);
+        return new DataType(this);
     }
+
     public DataType(DataType original) {
         this.baseType = original.getBaseType();
-        this.isArray = original.isArray();
+        this.specificationStack = original.getSpecificationStack();
     }
 
     /* others */
@@ -66,14 +89,18 @@ public class DataType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DataType dataType = (DataType) o;
-        return isArray == dataType.isArray &&
-                baseType == dataType.baseType;
+        return baseType == dataType.baseType &&
+                Objects.equals(specificationStack, dataType.specificationStack);
     }
 
     @Override
     public String toString() {
         String str = this.baseType.toString().toLowerCase();
-        if (isArray) str += "[]";
+        for (Specification specification : specificationStack) {
+            if (specification == Specification.ARRAY) {
+                str += "[]";
+            }
+        }
         return str;
     }
 }

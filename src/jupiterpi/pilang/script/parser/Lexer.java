@@ -119,7 +119,7 @@ public class Lexer {
     }
 
     private void flushBuffer() {
-        if (buffer == null || buffer.isEmpty()) return;
+        if (buffer == null) return;
         Type type = null;
         switch (bufferType) {
             case "operator":

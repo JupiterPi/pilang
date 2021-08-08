@@ -34,6 +34,18 @@ public class TokenSequence extends ArrayList<Token> {
         return subsequences;
     }
 
+    public TokenSequence sublist(int fromIndex, int toIndex) {
+        TokenSequence tokens = new TokenSequence();
+        for (int i = fromIndex; i < toIndex; i++) {
+            tokens.add(this.get(i));
+        }
+        return tokens;
+    }
+
+    public TokenSequence sublist(int fromIndex) {
+        return sublist(fromIndex, this.size());
+    }
+
     public String backToString() {
         AppendingList str = new AppendingList();
         for (Token token : this) {
