@@ -1,2 +1,2 @@
 debug
-test3a.pi
+test3b.pi

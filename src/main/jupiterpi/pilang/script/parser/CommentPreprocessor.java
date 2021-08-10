@@ -1,8 +1,5 @@
 package jupiterpi.pilang.script.parser;
 
-import jupiterpi.tools.files.Path;
-import jupiterpi.tools.files.TextFile;
-
 public class CommentPreprocessor {
     private String content;
 

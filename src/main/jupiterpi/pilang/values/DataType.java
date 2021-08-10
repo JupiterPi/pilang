@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class DataType {
     public enum BaseType {
-        INT, FLOAT, BOOL
+        INT, FLOAT, BOOL, CHAR
     }
 
     public enum Specification {
