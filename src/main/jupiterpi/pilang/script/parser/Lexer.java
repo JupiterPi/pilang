@@ -20,6 +20,12 @@ public class Lexer {
         return tokens;
     }
 
+    public static void main(String[] args) {
+        Lexer lexer = new Lexer("5+3+ 1.0 +true");
+        TokenSequence tokens = lexer.getTokens();
+        System.out.println(tokens);
+    }
+
     /* lexer */
 
     // character types
