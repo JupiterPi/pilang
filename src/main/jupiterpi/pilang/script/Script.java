@@ -1,10 +1,7 @@
 package jupiterpi.pilang.script;
 
 import jupiterpi.pilang.script.instructions.Instruction;
-import jupiterpi.pilang.script.parser.CommentPreprocessor;
-import jupiterpi.pilang.script.parser.Lexer;
-import jupiterpi.pilang.script.parser.Parser;
-import jupiterpi.pilang.script.parser.TokenSequence;
+import jupiterpi.pilang.script.parser.*;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;
 
@@ -34,13 +31,15 @@ public class Script extends Scope {
     private List<Instruction> instructions;
 
     private void generateInstructions(String content) {
-        content = removeComments(content);
+        content = applyPreprocessors(content);
         List<TokenSequence> lines = applyLexer(content);
         instructions = applyParser(lines);
     }
 
-    private String removeComments(String content) {
-        return new CommentPreprocessor(name, content).getContent();
+    private String applyPreprocessors(String oldContent) {
+        String content = new CommentPreprocessor(name, oldContent).getContent();
+        content = new StringPreprocessor(content).getContent();
+        return content;
     }
 
     private List<TokenSequence> applyLexer(String content) {

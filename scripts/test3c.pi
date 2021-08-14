@@ -1,0 +1,4 @@
+notice debug;
+
+char[] test = "abcdef";
+debug.out_str = test;

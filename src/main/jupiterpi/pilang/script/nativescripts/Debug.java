@@ -9,16 +9,18 @@ public class Debug extends NativeScript {
     public Debug() {
         super("debug");
 
-        addVariable(makeDebugVariable("out_int", DataType.BaseType.INT));
-        addVariable(makeDebugVariable("out_float", DataType.BaseType.FLOAT));
-        addVariable(makeDebugVariable("out_bool", DataType.BaseType.BOOL));
-        addVariable(makeDebugVariable("out_char", DataType.BaseType.CHAR));
+        addVariable(makeDebugVariable("int"));
+        addVariable(makeDebugVariable("float"));
+        addVariable(makeDebugVariable("bool"));
+        addVariable(makeDebugVariable("char"));
+        addVariable(makeDebugVariable("str"));
     }
 
-    private Variable makeDebugVariable(String name, DataType.BaseType type) {
+    private Variable makeDebugVariable(String type) {
+        String name = "out_" + type;
         Value value;
         switch (type) {
-            case INT: value = new Value() {
+            case "int": value = new Value() {
                 @Override
                 public DataType getType(Scope scope) {
                     return new DataType(DataType.BaseType.INT);
@@ -29,7 +31,7 @@ public class Debug extends NativeScript {
                     return "0";
                 }
             }; break;
-            case FLOAT: value = new Value() {
+            case "float": value = new Value() {
                 @Override
                 public DataType getType(Scope scope) {
                     return new DataType(DataType.BaseType.FLOAT);
@@ -40,7 +42,7 @@ public class Debug extends NativeScript {
                     return "0.0";
                 }
             }; break;
-            case BOOL: value = new Value() {
+            case "bool": value = new Value() {
                 @Override
                 public DataType getType(Scope scope) {
                     return new DataType(DataType.BaseType.BOOL);
@@ -51,7 +53,7 @@ public class Debug extends NativeScript {
                     return "false";
                 }
             }; break;
-            case CHAR: value = new Value() {
+            case "char": value = new Value() {
                 @Override
                 public DataType getType(Scope scope) {
                     return new DataType(DataType.BaseType.CHAR);
@@ -62,12 +64,30 @@ public class Debug extends NativeScript {
                     return "'-'";
                 }
             }; break;
+            case "str": value = new Value() {
+                @Override
+                public DataType getType(Scope scope) {
+                    return new DataType(DataType.BaseType.CHAR).sp_asArray();
+                }
+
+                @Override
+                public String get(Scope scope) {
+                    return "['-']";
+                }
+            }; break;
             default: return null;
         }
 
         return new Variable(this, name, value) {
             @Override
             public void set(Scope scope, Value value) {
+                if (value.getType(scope).equals(new DataType(DataType.BaseType.CHAR).sp_asArray())) {
+                    String str = "";
+                    for (Value v : value.getArray(scope)) {
+                        str += v.getChar(scope);
+                    }
+                    System.out.printf("[DEBUG] \"%s\"%n", str);
+                }
                 System.out.println("[DEBUG] " + value.getType(scope) + " " + value.get(scope));
             }
         };
