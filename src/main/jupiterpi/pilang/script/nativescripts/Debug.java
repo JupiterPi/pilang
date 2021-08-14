@@ -12,6 +12,7 @@ public class Debug extends NativeScript {
         addVariable(makeDebugVariable("out_int", DataType.BaseType.INT));
         addVariable(makeDebugVariable("out_float", DataType.BaseType.FLOAT));
         addVariable(makeDebugVariable("out_bool", DataType.BaseType.BOOL));
+        addVariable(makeDebugVariable("out_char", DataType.BaseType.CHAR));
     }
 
     private Variable makeDebugVariable(String name, DataType.BaseType type) {
@@ -48,6 +49,17 @@ public class Debug extends NativeScript {
                 @Override
                 public String get(Scope scope) {
                     return "false";
+                }
+            }; break;
+            case CHAR: value = new Value() {
+                @Override
+                public DataType getType(Scope scope) {
+                    return new DataType(DataType.BaseType.CHAR);
+                }
+
+                @Override
+                public String get(Scope scope) {
+                    return "'-'";
                 }
             }; break;
             default: return null;

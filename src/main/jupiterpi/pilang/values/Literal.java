@@ -12,14 +12,20 @@ public class Literal extends Value {
     private String value;
 
     public Literal(String value) {
-        if (listContains(numbers, value.substring(0, 1))) {
-            if (value.contains(".")) {
-                type = new DataType(DataType.BaseType.FLOAT);
-            } else {
-                type = new DataType(DataType.BaseType.INT);
-            }
+        if (value.startsWith("'")) {
+            if (value.length() == 3) {
+                type = new DataType(DataType.BaseType.CHAR);
+            } else new Exception("invalid char: " + value).printStackTrace();
         } else {
-            type = new DataType(DataType.BaseType.BOOL);
+            if (listContains(numbers, value.substring(0, 1))) {
+                if (value.contains(".")) {
+                    type = new DataType(DataType.BaseType.FLOAT);
+                } else {
+                    type = new DataType(DataType.BaseType.INT);
+                }
+            } else {
+                type = new DataType(DataType.BaseType.BOOL);
+            }
         }
         this.value = value;
     }

@@ -39,6 +39,15 @@ public abstract class Value {
         }
     }
 
+    public char getChar(Scope scope) {
+        if (getType(scope).equals(new DataType(DataType.BaseType.FLOAT))) {
+            return get(scope).charAt(1);
+        } else {
+            new Exception(String.format("tried to get char value of %s %s", getType(scope), get(scope))).printStackTrace();
+            return '\u0000';
+        }
+    }
+
     public List<Value> getArray(Scope scope) {
         if (getType(scope).isArray()) {
             List<Value> values = new ArrayList<>();

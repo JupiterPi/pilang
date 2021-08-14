@@ -1,6 +1,5 @@
 package jupiterpi.pilang.values;
 
-import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 
@@ -10,7 +9,7 @@ import java.util.Objects;
 
 public class DataType {
     public enum BaseType {
-        INT, FLOAT, BOOL
+        INT, FLOAT, BOOL, CHAR
     }
 
     public enum Specification {

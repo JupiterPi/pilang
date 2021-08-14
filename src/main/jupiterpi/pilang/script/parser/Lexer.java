@@ -30,9 +30,9 @@ public class Lexer {
 
     // character types
     private final List<String> operators = Arrays.asList("+-*/&|=".split(""));
-    private final List<String> literal = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789".split(""));
-    private final List<String> literalNumberStart = Arrays.asList("0123456789".split(""));
-    private final List<String> literalTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(""));
+    private final List<String> sequence = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789'".split(""));
+    private final List<String> sequenceNumberStart = Arrays.asList("0123456789".split(""));
+    private final List<String> sequenceTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(""));
     private final List<String> whitespaces = Arrays.asList(" \t\n\r".split(""));
     private final List<String> brackets = Arrays.asList("()[]".split(""));
 
@@ -117,7 +117,7 @@ public class Lexer {
 
     private String getCharacterType(String c) {
         if (listContains(operators, c)) return "operator";
-        if (listContains(literal, c)) return "literal";
+        if (listContains(sequence, c)) return "sequence";
         if (listContains(whitespaces, c)) return "whitespace";
         if (c.equals(",")) return "comma";
         new Exception("invalid character: " + c).printStackTrace();
@@ -145,8 +145,8 @@ public class Lexer {
                 if (buffer.equals("=")) type = ASSIGN;
                 else type = OPERATOR;
                 break;
-            case "literal":
-                if (listContains(literalNumberStart, buffer.substring(0, 1))) {
+            case "sequence":
+                if (listContains(sequenceNumberStart, buffer.substring(0, 1)) || buffer.startsWith("'")) { // number or char
                     type = LITERAL;
                 } else {
                     if (DataType.baseFromString(buffer) != null) {

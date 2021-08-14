@@ -25,6 +25,9 @@ public class Operation extends Value {
                     case "int": return Integer.toString((int) calculateNumber(scope));
                     case "float": return Float.toString(calculateNumber(scope));
                     case "bool": return Boolean.toString(calculateLogical(scope));
+                    case "char":
+                        new Exception("cannot perform operation " + operator + " on char value(s)").printStackTrace();
+                        return null;
                 }
             }
             new Exception("unknown data type: " + a.getType(scope)).printStackTrace();
