@@ -2,49 +2,47 @@ package jupiterpi.pilang.values.parsing.precedence;
 
 import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
+import jupiterpi.pilang.values.parsing.Expression;
+import jupiterpi.pilang.values.parsing.Item;
+import jupiterpi.pilang.values.parsing.OperatorItem;
+import jupiterpi.pilang.values.parsing.ValueItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static jupiterpi.pilang.script.parser.Token.Type.OPERATOR;
-
 public class ExpressionPrecedencer {
-    private TokenSequence tokens;
+    private List<Item> items;
 
-    public ExpressionPrecedencer(TokenSequence tokens) {
-        generateItemsList(tokens);
+    public ExpressionPrecedencer(List<Item> items) {
+        generateItemsList(items);
         determinePrecedence();
         if (isOnlyPrecedence()) {
-            this.tokens = tokens;
+            this.items = items;
         } else {
-            this.tokens = generateNewTokens();
+            this.items = generateNewItems();
         }
     }
 
-    public TokenSequence getTokens() {
-        return tokens;
+    public List<Item> getItems() {
+        return items;
     }
 
     /* precedencer */
 
-    private List<Item> items = new ArrayList<>();
+    private List<PrecedenceItem> precedenceItems = new ArrayList<>();
 
-    private void generateItemsList(TokenSequence tokens) {
-        for (Token token : tokens) {
-            if (token.getType() == OPERATOR) {
-                items.add(new Operator(token));
-            } else {
-                items.add(new Value(token));
-            }
+    private void generateItemsList(List<Item> items) {
+        for (Item item : items) {
+            precedenceItems.add(new PrecedenceItem(item));
         }
     }
 
     private void determinePrecedence() {
-        for (int i = 0; i < items.size(); i++) {
-            Item item = items.get(i);
-            if (!(item instanceof Operator)) continue;
+        for (int i = 0; i < precedenceItems.size(); i++) {
+            PrecedenceItem precedenceItem = precedenceItems.get(i);
+            if (!(precedenceItem.getItem() instanceof OperatorItem)) continue;
 
-            if (item.hasPrecedence()) {
+            if (precedenceItem.hasPrecedence()) {
                 applyPrecedence(i-1);
                 applyPrecedence(i+1);
             }
@@ -52,48 +50,49 @@ public class ExpressionPrecedencer {
     }
 
     private void applyPrecedence(int i) {
-        if (items.get(i) instanceof Value) {
-            ((Value)items.get(i)).setPrecedence(true);
+        PrecedenceItem precedenceItem = precedenceItems.get(i);
+        if (precedenceItem.getItem() instanceof ValueItem) {
+            precedenceItem.setPrecedence(true);
         } else {
             new Exception("invalid operator-value order").printStackTrace();
         }
     }
 
     private boolean isOnlyPrecedence() {
-        for (Item item : items) {
+        for (PrecedenceItem item : precedenceItems) {
             if (!item.hasPrecedence()) return false;
         }
         return true;
     }
 
-    private TokenSequence generateNewTokens() {
-        TokenSequence tokens = new TokenSequence();
+    private List<Item> generateNewItems() {
+        List<Item> items = new ArrayList<>();
 
         boolean insidePrecedence = false;
-        TokenSequence buffer = new TokenSequence();
-        for (Item item : items) {
+        List<Item> buffer = new ArrayList<>();
+        for (PrecedenceItem item : precedenceItems) {
             if (insidePrecedence) {
                 if (item.hasPrecedence()) {
-                    buffer.add(item.getToken());
+                    buffer.add(item.getItem());
                 } else {
-                    tokens.add(Token.expressionFromTokens(buffer));
-                    buffer = new TokenSequence();
-                    tokens.add(item.getToken());
+                    items.add(new ValueItem(new Expression(buffer)));
+                    buffer = new ArrayList<>();
+                    items.add(item.getItem());
                     insidePrecedence = false;
                 }
             } else {
                 if (item.hasPrecedence()) {
-                    buffer.add(item.getToken());
+                    buffer.add(item.getItem());
                     insidePrecedence = true;
                 } else {
-                    tokens.add(item.getToken());
+                    items.add(item.getItem());
                 }
             }
         }
         if (buffer.size() > 0) {
-            tokens.add(Token.expressionFromTokens(buffer));
+            items.add(new ValueItem(new Expression(buffer)));
         }
 
-        return tokens;
+        return items;
     }
 }

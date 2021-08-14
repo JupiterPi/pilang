@@ -7,25 +7,48 @@ import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.*;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 
+import java.util.List;
+
 public class Expression extends Value {
     private Value value;
 
+    // constructor interfaces
+
     public Expression(String expr) {
-        Lexer lexer = new Lexer(expr);
-        TokenSequence tokens = lexer.getTokens();
-        create(tokens);
+        createFromString(expr);
     }
 
     public Expression(TokenSequence tokens) {
-        create(tokens);
+        createFromTokenSequence(tokens);
     }
 
-    private void create(TokenSequence tokens) {
-        ExpressionPrecedencer precedencer = new ExpressionPrecedencer(tokens);
-        tokens = precedencer.getTokens();
-
-        value = parseTokens(tokens);
+    public Expression(List<Item> items) {
+        createFromItems(items);
     }
+
+    // constructor methods
+
+    private void createFromString(String expr) {
+        Lexer lexer = new Lexer(expr);
+        TokenSequence tokens = lexer.getTokens();
+        createFromTokenSequence(tokens);
+    }
+
+    private void createFromTokenSequence(TokenSequence tokens) {
+        ExpressionParser parser = new ExpressionParser(tokens);
+        List<Item> items = parser.getItems();
+
+        ExpressionPrecedencer precedencer = new ExpressionPrecedencer(items);
+        items = precedencer.getItems();
+
+        createFromItems(items);
+    }
+
+    private void createFromItems(List<Item> items) {
+        // ...
+    }
+
+    // Value getters
 
     @Override
     public String get(Scope scope) {
