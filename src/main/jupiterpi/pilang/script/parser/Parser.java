@@ -27,6 +27,8 @@ public class Parser {
     private void parseInstruction(List<TokenSequence> lines) {
         boolean insideHeader = true;
         for (TokenSequence line : lines) {
+            if (line.isEmpty()) continue;
+
             Instruction instruction = null;
 
             // DeclareVariable, ReassignVariable

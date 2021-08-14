@@ -34,7 +34,7 @@ public class Lexer {
     private final List<String> sequenceNumberStart = Arrays.asList("0123456789".split(""));
     private final List<String> sequenceTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(""));
     private final List<String> whitespaces = Arrays.asList(" \t\n\r".split(""));
-    private final List<String> brackets = Arrays.asList("()[]".split(""));
+    private final List<String> brackets = Arrays.asList("()[]{}".split(""));
 
     // buffer
     private String buffer = null;
@@ -42,16 +42,16 @@ public class Lexer {
     private List<BracketType> bracketStack = new ArrayList<>();
 
     private enum BracketType {
-        PARENTHESES, BRACKETS
+        PARENTHESES, BRACKETS, BRACES
     }
 
     private TokenSequence generateTokens(String expr) {
         /*if (expr.equals("[ [1, 2], [3, 4] ]")) new Exception("here").printStackTrace();
         System.out.println("expr: _" + expr + "_");*/
 
-        expr = expr + ";";
+        expr = expr + "ä";
         for (String c : expr.split("")) {
-            if (c.equals(";")) {
+            if (c.equals("ä")) {
                 flushBuffer();
                 continue;
             }
@@ -59,7 +59,10 @@ public class Lexer {
             if (listContains(brackets, c)) {
                 int index = listIndexOf(brackets, c);
                 if ((index+1) % 2 == 1) { // opening bracket
-                    BracketType type = c.equals("(") ? BracketType.PARENTHESES : BracketType.BRACKETS;
+                    BracketType type = BracketType.PARENTHESES;
+                    if (c.equals("[")) type = BracketType.BRACKETS;
+                    if (c.equals("{")) type = BracketType.BRACES;
+
                     bracketStack.add(type);
                     if (bracketStack.size() == 1) {
                         flushBuffer();
@@ -68,7 +71,10 @@ public class Lexer {
                         continue;
                     }
                 } else { // closing bracket
-                    BracketType type = c.equals(")") ? BracketType.PARENTHESES : BracketType.BRACKETS;
+                    BracketType type = BracketType.PARENTHESES;
+                    if (c.equals("]")) type = BracketType.BRACKETS;
+                    if (c.equals("}")) type = BracketType.BRACES;
+
                     if (bracketStack.get(bracketStack.size()-1) == type) {
                         bracketStack.remove(bracketStack.size()-1);
                     } else {
@@ -89,6 +95,13 @@ public class Lexer {
                 flushBuffer();
                 buffer = ",";
                 bufferType = "comma";
+                flushBuffer();
+                continue;
+            }
+            if (c.equals(";")) {
+                flushBuffer();
+                buffer = ";";
+                bufferType = "semicolon";
                 flushBuffer();
                 continue;
             }
@@ -120,6 +133,7 @@ public class Lexer {
         if (listContains(sequence, c)) return "sequence";
         if (listContains(whitespaces, c)) return "whitespace";
         if (c.equals(",")) return "comma";
+        if (c.equals(";")) return "semicolon";
         new Exception("invalid character: " + c).printStackTrace();
         return null;
     }
@@ -167,8 +181,14 @@ public class Lexer {
             case "BRACKETS":
                 type = BRACKET_EXPRESSION;
                 break;
+            case "BRACES":
+                type = BRACES_EXPRESSION;
+                break;
             case "comma":
                 type = COMMA;
+                break;
+            case "semicolon":
+                type = SEMICOLON;
                 break;
             case "assign":
                 type = ASSIGN;

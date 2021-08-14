@@ -5,10 +5,10 @@ import static jupiterpi.pilang.script.parser.Token.Type.EXPRESSION;
 
 public class Token {
     public enum Type {
-        LITERAL, OPERATOR, EXPRESSION, BRACKET_EXPRESSION,
+        LITERAL, OPERATOR, EXPRESSION, BRACKET_EXPRESSION, BRACES_EXPRESSION,
         TYPE, ASSIGN, IDENTIFIER,
         NOTICE, INTEGRATE,
-        COMMA
+        COMMA, SEMICOLON
     }
 
     private Type type;

@@ -43,14 +43,9 @@ public class Script extends Scope {
     }
 
     private List<TokenSequence> applyLexer(String content) {
-        List<TokenSequence> lines = new ArrayList<>();
-        for (String line : content.split(";")) {
-            Lexer lexer = new Lexer(line);
-            TokenSequence tokens = new TokenSequence(lexer.getTokens());
-            if (tokens.size() == 0) continue;
-            lines.add(tokens);
-        }
-        return lines;
+        Lexer lexer = new Lexer(content);
+        TokenSequence tokens = lexer.getTokens();
+        return tokens.split(new Token(Token.Type.SEMICOLON));
     }
 
     private List<Instruction> applyParser(List<TokenSequence> lines) {

@@ -2,3 +2,7 @@ notice debug;
 
 char[] test = "abcdef";
 debug.out_str = test;
+
+int() func = int(int a, int b){
+    // ...
+};
