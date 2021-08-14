@@ -149,7 +149,7 @@ public class Lexer {
                 if (listContains(literalNumberStart, buffer.substring(0, 1))) {
                     type = LITERAL;
                 } else {
-                    if (DataType.from(buffer) != null) {
+                    if (DataType.baseFromString(buffer) != null) {
                         type = TYPE;
                     } else {
                         switch (buffer) {

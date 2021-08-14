@@ -1,5 +1,6 @@
 package jupiterpi.pilang.values;
 
+import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 
@@ -13,7 +14,7 @@ public class DataType {
     }
 
     public enum Specification {
-        ARRAY
+        ARRAY, FUNCTION
     }
 
     private BaseType baseType;
@@ -29,7 +30,7 @@ public class DataType {
         this.specificationStack = specificationStack;
     }
 
-    public static DataType from(String str) {
+    public static DataType baseFromString(String str) {
         BaseType baseType;
         try {
             baseType = BaseType.valueOf(str.toUpperCase());
@@ -39,7 +40,7 @@ public class DataType {
         return new DataType(baseType);
     }
 
-    public static DataType from(TokenSequence tokens) {
+    public static DataType fromTokenSequence(TokenSequence tokens) {
         BaseType baseType;
         try {
             baseType = BaseType.valueOf(tokens.get(0).getContent().toUpperCase());
@@ -52,6 +53,9 @@ public class DataType {
         for (Token token : tokens) {
             if (token.getType() == Token.Type.BRACKET_EXPRESSION) {
                 specificationStack.add(Specification.ARRAY);
+            }
+            if (token.getType() == Token.Type.EXPRESSION) {
+                specificationStack.add(Specification.FUNCTION);
             }
         }
 
@@ -73,6 +77,12 @@ public class DataType {
     public DataType sp_asArray() {
         List<Specification> specificationStack = getSpecificationStack();
         specificationStack.add(Specification.ARRAY);
+        return new DataType(baseType, specificationStack);
+    }
+
+    public DataType sp_asFunction() {
+        List<Specification> specificationStack = getSpecificationStack();
+        specificationStack.add(Specification.FUNCTION);
         return new DataType(baseType, specificationStack);
     }
 

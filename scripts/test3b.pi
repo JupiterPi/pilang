@@ -1,2 +1,4 @@
-notice debug;
+integrate debug;
 
+out_int = 5 * 3;
+out_int = 3 + 1 * 5;

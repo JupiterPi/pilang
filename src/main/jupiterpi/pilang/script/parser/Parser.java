@@ -39,7 +39,7 @@ public class Parser {
                 Value value = new Expression(expr);
                 String name = head.get(head.size()-1).getContent();
                 if (head.size() > 1) {
-                    DataType type = DataType.from(head.sublist(0, head.size()-1));
+                    DataType type = DataType.fromTokenSequence(head.sublist(0, head.size()-1));
                     instruction = new DeclareVariableInstruction(type, name, value);
                 } else {
                     instruction = new ReassignVariableInstruction(name, value);
