@@ -1,10 +1,11 @@
 package jupiterpi.pilang.values.parsing;
 
 import jupiterpi.pilang.script.parser.Lexer;
-import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
-import jupiterpi.pilang.values.*;
+import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.Operation;
+import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class Expression extends Value {
     }
 
     private void createFromItems(List<Item> items) {
-        // ...
+        value = parseItems(items);
     }
 
     // Value getters
@@ -67,61 +68,36 @@ public class Expression extends Value {
     private String operator = null;
     private Value b = null;
 
-    private Value parseTokens(TokenSequence tokens) {
-        for (Token t : tokens) {
-            switch (t.getType()) {
-                case EXPRESSION:
-                    appendValue(new Expression(t.getContent()));
-                    break;
-                case BRACKET_EXPRESSION:
-                    if ((a == null && operator == null && b == null) || (a != null && operator != null && b == null)) { // value is needed
-                        appendValue(new ArrayLiteral(t.getContent()));
-                    } else { // value is given
-                        boolean isA = (b == null);
-                        Value original = isA ? a : b;
-                        Value callWrapper = new ArrayCallWrapper(original, new Expression(t.getContent()));
-                        if (isA) a = callWrapper;
-                        else b = callWrapper;
-                    }
-                    break;
-                case LITERAL:
-                    appendValue(new Literal(t.getContent()));
-                    break;
-                case OPERATOR:
-                    if (operator == null) {
-                        operator = t.getContent();
+    private Value parseItems(List<Item> items) {
+        for (Item item : items) {
+            if (item instanceof ValueItem) {
+                Value value = ((ValueItem) item).getValue();
+                if (a == null) {
+                    a = value;
+                } else {
+                    if (b == null) {
+                        b = value;
                     } else {
-                        new Exception("no space for operator: " + t.getContent()).printStackTrace();
+                        new Exception("no space for value: " + value).printStackTrace();
                     }
-                    break;
-                case IDENTIFIER:
-                    appendValue(new VariableReference(t.getContent()));
-                    break;
-                default: new Exception("invalid token type " + t.getType()).printStackTrace();
+                }
+            } else {
+                if (item instanceof OperatorItem) {
+                    if (operator == null) {
+                        operator = ((OperatorItem) item).getOperator();
+                    } else {
+                        new Exception("no space for operator: " + ((OperatorItem) item).getOperator()).printStackTrace();
+                    }
+                } else new Exception("unknown Item type").printStackTrace();
             }
-            flushOperation();
+
+            if (a != null && operator != null && b != null) {
+                a = new Operation(a, operator, b);
+                operator = null;
+                b = null;
+            }
         }
         return a;
-    }
-
-    private void flushOperation() {
-        if (a != null && operator != null && b != null) {
-            a = new Operation(a, operator, b);
-            operator = null;
-            b = null;
-        }
-    }
-
-    private void appendValue(Value value) {
-        if (a == null) {
-            a = value;
-        } else {
-            if (b == null) {
-                b = value;
-            } else {
-                new Exception("no space for value: " + value).printStackTrace();
-            }
-        }
     }
 
     @Override
