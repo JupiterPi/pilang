@@ -1,7 +1,6 @@
 package jupiterpi.pilang.script.parser;
 
-import static jupiterpi.pilang.script.parser.Token.Type.BRACKET_EXPRESSION;
-import static jupiterpi.pilang.script.parser.Token.Type.EXPRESSION;
+import static jupiterpi.pilang.script.parser.Token.Type.*;
 
 public class Token {
     public enum Type {
@@ -44,6 +43,7 @@ public class Token {
         String str = getContent();
         if (type == EXPRESSION) str = String.format("(%s)", str);
         if (type == BRACKET_EXPRESSION) str = String.format("[%s]", str);
+        if (type == BRACES_EXPRESSION) str = String.format("{%s}", str);
         return str;
     }
 

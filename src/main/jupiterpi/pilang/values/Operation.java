@@ -28,6 +28,9 @@ public class Operation extends Value {
                     case "char":
                         new Exception("cannot perform operation " + operator + " on char value(s)").printStackTrace();
                         return null;
+                    case "void":
+                        new Exception("cannot perform operation " + operator + "on void value(s)").printStackTrace();
+                        return null;
                 }
             }
             new Exception("unknown data type: " + a.getType(scope)).printStackTrace();
