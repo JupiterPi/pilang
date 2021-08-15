@@ -1,23 +1,27 @@
 package jupiterpi.pilang.script.runtime;
 
 import jupiterpi.pilang.script.instructions.Instruction;
-import jupiterpi.pilang.script.parser.Lexer;
-import jupiterpi.pilang.script.parser.Parser;
-import jupiterpi.pilang.script.parser.Token;
-import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.values.Value;
+import jupiterpi.pilang.values.functions.VariableHead;
 
 import java.util.List;
 
 public class Function extends Scope {
+    private String reference;
+
+    private List<VariableHead> parameters;
     private List<Instruction> instructions;
 
-    public Function(Scope parentScope, Token content) {
+    public Function(Scope parentScope, List<VariableHead> parameters, List<Instruction> instructions) {
         super(parentScope);
+        this.parameters = parameters;
+        this.instructions = instructions;
 
-        TokenSequence tokens = new Lexer(content.getContent()).getTokens();
-        List<TokenSequence> lines = tokens.split(new Token(Token.Type.SEMICOLON));
-        instructions = new Parser(lines).getInstructions();
+        this.reference = parentScope.getRegistry().registerFunction(this);
+    }
+
+    public String getReference() {
+        return reference;
     }
 
     public Value execute() {
@@ -25,5 +29,14 @@ public class Function extends Scope {
             instruction.execute(this);
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Function{" +
+                "reference='" + reference + '\'' +
+                ", parameters=" + parameters +
+                ", instructions=" + instructions +
+                '}';
     }
 }

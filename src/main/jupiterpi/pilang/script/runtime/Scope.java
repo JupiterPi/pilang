@@ -35,4 +35,8 @@ public class Scope {
     public void addVariable(Variable variable) {
         variables.add(variable);
     }
+
+    public ReferenceRegistry getRegistry() {
+        return parentScope.getRegistry();
+    }
 }

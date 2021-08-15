@@ -108,6 +108,10 @@ public class DataType {
         return specificationStack.get(specificationStack.size()-1) == Specification.ARRAY;
     }
 
+    public boolean isFunction() {
+        return specificationStack.get(specificationStack.size()-1) == Specification.FUNCTION;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -4,6 +4,9 @@ import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.*;
+import jupiterpi.pilang.values.arrays.ArrayCallWrapper;
+import jupiterpi.pilang.values.arrays.ArrayLiteral;
+import jupiterpi.pilang.values.functions.FunctionLiteral;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +32,7 @@ public class ExpressionParser {
             if (partOfFunction) {
                 functionDefinition.add(t);
                 if (t.getType() == Token.Type.BRACES_EXPRESSION) {
-                    appendValue(makeFunction());
+                    appendValue(new FunctionLiteral(functionDefinition));
                     partOfFunction = false;
                 }
             } else {
@@ -81,21 +84,5 @@ public class ExpressionParser {
 
     private void appendOperator(String operator) {
         items.add(new OperatorItem(operator));
-    }
-
-    private Value makeFunction() {
-        System.out.println(functionDefinition);
-        return new Value() {
-            @Override
-            public DataType getType(Scope scope) {
-                return null;
-            }
-
-            @Override
-            public String get(Scope scope) {
-                return null;
-            }
-        };
-        // TODO implement function generation
     }
 }

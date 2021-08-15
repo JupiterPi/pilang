@@ -2,6 +2,7 @@ package jupiterpi.pilang.script;
 
 import jupiterpi.pilang.script.instructions.Instruction;
 import jupiterpi.pilang.script.parser.*;
+import jupiterpi.pilang.script.runtime.ReferenceRegistry;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;
 
@@ -10,21 +11,33 @@ import java.util.List;
 
 public class Script extends Scope {
     private String name;
-
     public String getName() {
         return name;
     }
 
     /* constructor */
 
-    public Script(String name, String content) {
+    public Script(String name, String content, ReferenceRegistry registry) {
         this.name = name;
         generateInstructions(content);
+        this.registry = registry;
     }
 
-    public Script(String name) {
+    protected Script(String name, ReferenceRegistry registry) {
         this.name = name;
+        this.registry = registry;
     }
+
+    //region reference registry
+
+    private ReferenceRegistry registry;
+
+    @Override
+    public ReferenceRegistry getRegistry() {
+        return registry;
+    }
+
+    //endregion
 
     //region generate instructions
 

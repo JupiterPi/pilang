@@ -1,13 +1,14 @@
 package jupiterpi.pilang.script.nativescripts;
 
+import jupiterpi.pilang.script.runtime.ReferenceRegistry;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 
 public class Debug extends NativeScript {
-    public Debug() {
-        super("debug");
+    public Debug(ReferenceRegistry registry) {
+        super("debug", registry);
 
         addVariable(makeDebugVariable("int"));
         addVariable(makeDebugVariable("float"));

@@ -3,7 +3,9 @@ package jupiterpi.pilang.values;
 import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
+import jupiterpi.pilang.script.runtime.Function;
 import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.values.arrays.ArrayLiteral;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +66,17 @@ public abstract class Value {
             return values;
         } else {
             new Exception("tried to get array of non-array " + getType(scope) + " " + get(scope)).printStackTrace();
+            return null;
+        }
+    }
+
+    public Function getFunction(Scope scope) {
+        if (getType(scope).isFunction()) {
+            String str = get(scope);
+            String id = str.substring(1, str.length()-1);
+            return scope.getRegistry().findFunction(id);
+        } else {
+            new Exception("tried to get function of non-function " + getType(scope) + " " + get(scope)).printStackTrace();
             return null;
         }
     }

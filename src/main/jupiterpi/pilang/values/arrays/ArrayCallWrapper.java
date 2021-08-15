@@ -1,6 +1,8 @@
-package jupiterpi.pilang.values;
+package jupiterpi.pilang.values.arrays;
 
 import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.Value;
 
 import java.util.List;
 

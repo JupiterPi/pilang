@@ -1,9 +1,11 @@
-package jupiterpi.pilang.values;
+package jupiterpi.pilang.values.arrays;
 
 import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.Expression;
 import jupiterpi.tools.util.AppendingList;
 
