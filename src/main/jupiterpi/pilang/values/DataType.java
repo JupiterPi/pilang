@@ -105,10 +105,12 @@ public class DataType {
     /* others */
 
     public boolean isArray() {
+        if (specificationStack.size() == 0) return false;
         return specificationStack.get(specificationStack.size()-1) == Specification.ARRAY;
     }
 
     public boolean isFunction() {
+        if (specificationStack.size() == 0) return false;
         return specificationStack.get(specificationStack.size()-1) == Specification.FUNCTION;
     }
 

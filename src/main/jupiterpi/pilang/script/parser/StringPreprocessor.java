@@ -26,6 +26,7 @@ public class StringPreprocessor {
                 if (insideString) {
                     content += generateStringCode();
                     insideString = false;
+                    buffer = "";
                 } else {
                     insideString = true;
                 }

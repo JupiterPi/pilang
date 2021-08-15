@@ -13,3 +13,5 @@ void() out = void(char[] str) {
 };
 
 out("hi");
+
+debug.println("hii");

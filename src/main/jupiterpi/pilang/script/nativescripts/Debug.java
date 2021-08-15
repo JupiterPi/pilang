@@ -1,10 +1,13 @@
 package jupiterpi.pilang.script.nativescripts;
 
+import jupiterpi.pilang.script.runtime.Function;
 import jupiterpi.pilang.script.runtime.ReferenceRegistry;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
+
+import java.util.List;
 
 public class Debug extends NativeScript {
     public Debug(ReferenceRegistry registry) {
@@ -15,6 +18,44 @@ public class Debug extends NativeScript {
         addVariable(makeDebugVariable("bool"));
         addVariable(makeDebugVariable("char"));
         addVariable(makeDebugVariable("str"));
+
+        Scope script = this;
+        addVariable("println", new Value() {
+            private Function function = new Function(script){
+                @Override
+                public Value executeFunction(List<Value> parameters, Scope callingScope) {
+                    Value strValue = parameters.get(0);
+                    if (strValue.getType(script).equals(new DataType(DataType.BaseType.CHAR).sp_asArray())) {
+                        String str = "";
+                        for (Value value : strValue.getArray(script)) {
+                            str += value.getChar(script);
+                        }
+                        System.out.println("[DEBUG] " + str);
+                    } else new Exception("mismatching types in parameters").printStackTrace();
+                    return new Value() {
+                        @Override
+                        public DataType getType(Scope scope) {
+                            return new DataType(DataType.BaseType.VOID);
+                        }
+
+                        @Override
+                        public String get(Scope scope) {
+                            return "";
+                        }
+                    };
+                }
+            };
+
+            @Override
+            public DataType getType(Scope scope) {
+                return new DataType(DataType.BaseType.VOID).sp_asFunction();
+            }
+
+            @Override
+            public String get(Scope scope) {
+                return "{" + function.getReference() + "}";
+            }
+        });
     }
 
     private Variable makeDebugVariable(String type) {
