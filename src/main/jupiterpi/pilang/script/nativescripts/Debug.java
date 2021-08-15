@@ -88,6 +88,7 @@ public class Debug extends NativeScript {
                         str += v.getChar(scope);
                     }
                     System.out.printf("[DEBUG] \"%s\"%n", str);
+                    return;
                 }
                 System.out.println("[DEBUG] " + value.getType(scope) + " " + value.get(scope));
             }

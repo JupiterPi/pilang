@@ -66,6 +66,11 @@ public class Parser {
                 instruction = new ReturnInstruction(returnValue);
             }
 
+            // FunctionCall          !!!!! last option !!!!!
+            if (instruction == null) {
+                instruction = new FunctionCallInstruction(line);
+            }
+
             if (instruction == null) new Exception("invalid line: " + line.backToString()).printStackTrace();
             instructions.add(instruction);
         }

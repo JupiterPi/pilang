@@ -1,8 +1,5 @@
 notice debug;
 
-char[] test = "abcdef";
-debug.out_str = test;
-
 int() add = int(int a, int b){
     int c = a + b;
     return c;
@@ -10,3 +7,9 @@ int() add = int(int a, int b){
 
 int sum = add(5, 3 + 1);
 debug.out_int = sum;
+
+void() out = void(char[] str) {
+    debug.out_str = str;
+};
+
+out("hi");
