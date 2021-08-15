@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script.runtime;
 
 import jupiterpi.pilang.script.instructions.Instruction;
+import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.functions.VariableHead;
 
@@ -24,11 +25,42 @@ public class Function extends Scope {
         return reference;
     }
 
-    public Value execute() {
+    public Value executeFunction(List<Value> parameters, Scope callingScope) {
+        if (this.parameters.size() == parameters.size()) {
+            for (int i = 0; i < this.parameters.size(); i++) {
+                VariableHead definition = this.parameters.get(i);
+                Value value = parameters.get(i);
+                if (definition.getType().equals(value.getType(callingScope))) {
+                    this.addVariable(new Variable(this, definition.getName(), value));
+                } else new Exception("mismatching types in parameters").printStackTrace();
+            }
+        } else new Exception("mismatching parameters").printStackTrace();
+
         for (Instruction instruction : instructions) {
             instruction.execute(this);
         }
-        return null;
+
+        if (returnValue == null) {
+            return new Value() {
+                @Override
+                public DataType getType(Scope scope) {
+                    return new DataType(DataType.BaseType.VOID);
+                }
+                @Override
+                public String get(Scope scope) {
+                    return "";
+                }
+            };
+        } else {
+            return returnValue;
+        }
+    }
+
+    private Value returnValue = null;
+
+    @Override
+    public void returnValue(Value value) {
+        returnValue = value;
     }
 
     @Override

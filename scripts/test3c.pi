@@ -3,6 +3,8 @@ notice debug;
 char[] test = "abcdef";
 debug.out_str = test;
 
-int() func = int(int a, int b){
+int() add = int(int a, int b){
     int c = a + b;
+    debug.out_int = c;
 };
+int sum = add(5, 3); // content cannot yet be retrieved, will be added

@@ -51,17 +51,23 @@ public abstract class Value {
     }
 
     public List<Value> getArray(Scope scope) {
-        if (getType(scope).isArray()) {
+        DataType type = getType(scope);
+        if (type.isArray()) {
             List<Value> values = new ArrayList<>();
             TokenSequence immediateTokens = new Lexer(get(scope)).getTokens();
             TokenSequence tokens = new Lexer(immediateTokens.get(0).getContent()).getTokens();
             for (TokenSequence item : tokens.split(new Token(Token.Type.COMMA))) {
                 String str = item.backToString();
-                if (str.startsWith("[")) {
-                    values.add(new ArrayLiteral(str.substring(1, str.length()-1)));
-                } else {
-                    values.add(new Literal(str));
-                }
+                values.add(new Value() {
+                    @Override
+                    public DataType getType(Scope scope) {
+                        return type.sp_of();
+                    }
+                    @Override
+                    public String get(Scope scope) {
+                        return str;
+                    }
+                });
             }
             return values;
         } else {

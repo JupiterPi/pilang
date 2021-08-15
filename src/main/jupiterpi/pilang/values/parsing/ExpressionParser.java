@@ -1,11 +1,13 @@
 package jupiterpi.pilang.values.parsing;
 
+import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.*;
 import jupiterpi.pilang.values.arrays.ArrayCallWrapper;
 import jupiterpi.pilang.values.arrays.ArrayLiteral;
+import jupiterpi.pilang.values.functions.FunctionCallWrapper;
 import jupiterpi.pilang.values.functions.FunctionLiteral;
 
 import java.util.ArrayList;
@@ -43,17 +45,35 @@ public class ExpressionParser {
                     continue;
                 }
 
+                Item lastItem = items.size() == 0 ? null : items.get(items.size() - 1);
                 switch (t.getType()) {
                     case EXPRESSION:
-                        appendValue(new Expression(t.getContent()));
+                        if (lastItem == null) {
+                            appendValue(new Expression(t.getContent()));
+                            break;
+                        }
+
+                        if (lastItem instanceof ValueItem) {
+                            Value original = ((ValueItem) lastItem).getValue();
+
+                            List<Value> parameters = new ArrayList<>();
+                            TokenSequence parametersTokens = new Lexer(t.getContent()).getTokens();
+                            for (TokenSequence parameterTokens : parametersTokens.split(new Token(Token.Type.COMMA))) {
+                                parameters.add(new Expression(parameterTokens));
+                            }
+
+                            Value callWrapper = new FunctionCallWrapper(original, parameters);
+                            items.set(items.size() - 1, new ValueItem(callWrapper));
+                        } else {
+                            appendValue(new Expression(t.getContent()));
+                        }
                         break;
                     case BRACKET_EXPRESSION:
-                        if (items.size() == 0) {
+                        if (lastItem == null) {
                             appendValue(new ArrayLiteral(t.getContent()));
                             break;
                         }
 
-                        Item lastItem = items.get(items.size() - 1);
                         if (lastItem instanceof ValueItem) {
                             Value original = ((ValueItem) lastItem).getValue();
                             Value callWrapper = new ArrayCallWrapper(original, new Expression(t.getContent()));

@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script.runtime;
 
 import jupiterpi.pilang.script.instructions.Instruction;
+import jupiterpi.pilang.values.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +33,17 @@ public class Scope {
         return null;
     }
 
+    public ReferenceRegistry getRegistry() {
+        return parentScope.getRegistry();
+    }
+
+    /* interaction from inside */
+
     public void addVariable(Variable variable) {
         variables.add(variable);
     }
 
-    public ReferenceRegistry getRegistry() {
-        return parentScope.getRegistry();
+    public void returnValue(Value value) {
+        new Exception("cannot return value from non-returnable scope").printStackTrace();
     }
 }
