@@ -7,7 +7,8 @@ public class Token {
         LITERAL, OPERATOR, EXPRESSION, BRACKET_EXPRESSION, BRACES_EXPRESSION,
         TYPE, ASSIGN, IDENTIFIER,
         NOTICE, INTEGRATE,
-        COMMA, SEMICOLON
+        COMMA, SEMICOLON,
+        RETURN
     }
 
     private Type type;

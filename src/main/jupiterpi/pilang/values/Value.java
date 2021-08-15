@@ -5,7 +5,6 @@ import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Function;
 import jupiterpi.pilang.script.runtime.Scope;
-import jupiterpi.pilang.values.arrays.ArrayLiteral;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,5 +84,21 @@ public abstract class Value {
             new Exception("tried to get function of non-function " + getType(scope) + " " + get(scope)).printStackTrace();
             return null;
         }
+    }
+
+    public Value asFinal(Scope scope) {
+        DataType type = getType(scope);
+        String value = get(scope);
+        return new Value() {
+            @Override
+            public DataType getType(Scope scope) {
+                return type;
+            }
+
+            @Override
+            public String get(Scope scope) {
+                return value;
+            }
+        };
     }
 }

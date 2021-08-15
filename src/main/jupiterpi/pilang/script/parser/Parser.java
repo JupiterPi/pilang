@@ -1,9 +1,6 @@
 package jupiterpi.pilang.script.parser;
 
-import jupiterpi.pilang.script.instructions.DeclareVariableInstruction;
-import jupiterpi.pilang.script.instructions.ImportScriptInstruction;
-import jupiterpi.pilang.script.instructions.Instruction;
-import jupiterpi.pilang.script.instructions.ReassignVariableInstruction;
+import jupiterpi.pilang.script.instructions.*;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.Expression;
@@ -41,7 +38,7 @@ public class Parser {
                 Value value = new Expression(expr);
                 String name = head.get(head.size()-1).getContent();
                 if (head.size() > 1) {
-                    DataType type = DataType.fromTokenSequence(head.sublist(0, head.size()-1));
+                    DataType type = DataType.fromTokenSequence(head.subsequence(0, head.size()-1));
                     instruction = new DeclareVariableInstruction(type, name, value);
                 } else {
                     instruction = new ReassignVariableInstruction(name, value);
@@ -60,6 +57,13 @@ public class Parser {
                 boolean integrate = line.get(0).getType() == Token.Type.INTEGRATE;
                 String scriptName = line.get(1).getContent();
                 instruction = new ImportScriptInstruction(integrate, scriptName);
+            }
+
+            // Return
+            if (line.get(0).getType() == Token.Type.RETURN) {
+                TokenSequence returnValueTokens = line.subsequence(1);
+                Value returnValue = new Expression(returnValueTokens);
+                instruction = new ReturnInstruction(returnValue);
             }
 
             if (instruction == null) new Exception("invalid line: " + line.backToString()).printStackTrace();

@@ -20,7 +20,7 @@ public class FunctionLiteral extends Value {
 
     public FunctionLiteral(TokenSequence tokens) {
         if (tokens.size() >= 3) {
-            TokenSequence type = tokens.sublist(0, tokens.size()-2);
+            TokenSequence type = tokens.subsequence(0, tokens.size()-2);
             Token parameters = tokens.get(tokens.size()-2);
             Token content = tokens.get(tokens.size()-1);
 
@@ -57,7 +57,7 @@ public class FunctionLiteral extends Value {
 
     private void checkCreated(Scope scope) {
         if (!created) {
-            this.function = new Function(scope, parameters, content);
+            this.function = new Function(scope, parameters, type.sp_of(), content);
             created = true;
         }
     }

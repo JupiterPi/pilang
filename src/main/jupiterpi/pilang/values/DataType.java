@@ -46,7 +46,7 @@ public class DataType {
         } catch (IllegalArgumentException e) {
             return null;
         }
-        tokens = tokens.sublist(1);
+        tokens = tokens.subsequence(1);
 
         List<Specification> specificationStack = new ArrayList<>();
         for (Token token : tokens) {

@@ -8,7 +8,7 @@ public class VariableHead {
     private String name;
 
     public VariableHead(TokenSequence tokens) {
-        this.type = DataType.fromTokenSequence(tokens.sublist(0, tokens.size()-1));
+        this.type = DataType.fromTokenSequence(tokens.subsequence(0, tokens.size()-1));
         this.name = tokens.get(tokens.size()-1).getContent();
     }
 

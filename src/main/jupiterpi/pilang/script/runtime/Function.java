@@ -11,14 +11,17 @@ public class Function extends Scope {
     private String reference;
 
     private List<VariableHead> parameters;
+    private DataType returnType;
     private List<Instruction> instructions;
 
-    public Function(Scope parentScope, List<VariableHead> parameters, List<Instruction> instructions) {
+    public Function(Scope parentScope, List<VariableHead> parameters, DataType returnType, List<Instruction> instructions) {
         super(parentScope);
-        this.parameters = parameters;
-        this.instructions = instructions;
-
         this.reference = parentScope.getRegistry().registerFunction(this);
+
+        this.parameters = parameters;
+        this.returnType = returnType;
+
+        this.instructions = instructions;
     }
 
     public String getReference() {
@@ -52,7 +55,7 @@ public class Function extends Scope {
                 }
             };
         } else {
-            return returnValue;
+            return returnValue.asFinal(this);
         }
     }
 

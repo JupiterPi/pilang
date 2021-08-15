@@ -24,7 +24,6 @@ public class FunctionCallWrapper extends Value {
     @Override
     public String get(Scope scope) {
         Function function = this.function.getFunction(scope);
-        System.out.println(function);
         return function.executeFunction(parameters, scope).get(scope);
     }
 }

@@ -5,6 +5,7 @@ import jupiterpi.pilang.script.parser.*;
 import jupiterpi.pilang.script.runtime.ReferenceRegistry;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;
+import jupiterpi.pilang.values.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,5 +132,12 @@ public class Script extends Scope {
             }
         }
         list.add(script);
+    }
+
+    /* other */
+
+    @Override
+    public void returnValue(Value value) {
+        new Exception("cannot return value from non-returnable scope").printStackTrace();
     }
 }

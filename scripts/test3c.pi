@@ -5,6 +5,8 @@ debug.out_str = test;
 
 int() add = int(int a, int b){
     int c = a + b;
-    debug.out_int = c;
+    return c;
 };
-int sum = add(5, 3); // content cannot yet be retrieved, will be added
+
+int sum = add(5, 3 + 1);
+debug.out_int = sum;

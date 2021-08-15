@@ -169,6 +169,7 @@ public class Lexer {
                         switch (buffer) {
                             case "notice": type = NOTICE; break;
                             case "integrate": type = INTEGRATE; break;
+                            case "return": type = RETURN; break;
                             case "true": case "false": type = LITERAL; break;
                             default: type = IDENTIFIER;
                         }

@@ -44,6 +44,6 @@ public class Scope {
     }
 
     public void returnValue(Value value) {
-        new Exception("cannot return value from non-returnable scope").printStackTrace();
+        parentScope.returnValue(value);
     }
 }
