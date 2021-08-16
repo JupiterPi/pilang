@@ -8,9 +8,9 @@ int() add = int(int a, int b){
 int sum = add(5, 3 + 1);
 debug.print_int(sum);
 
-debug.print("_____");
+debug.print("-------");
 debug.print_int(1);
 debug.print_float(1.0);
 debug.print_bool(true);
 debug.print_char('a');
-debug.print("hi");
+debug.print("hello there");

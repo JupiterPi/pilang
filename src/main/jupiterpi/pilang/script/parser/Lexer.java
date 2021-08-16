@@ -30,7 +30,7 @@ public class Lexer {
 
     // character types
     private final List<String> operators = Arrays.asList("+-*/&|=".split(""));
-    private final List<String> sequence = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789'".split(""));
+    private final List<String> sequence = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789".split(""));
     private final List<String> sequenceNumberStart = Arrays.asList("0123456789".split(""));
     private final List<String> sequenceTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(""));
     private final List<String> whitespaces = Arrays.asList(" \t\n\r".split(""));
@@ -39,19 +39,20 @@ public class Lexer {
     // buffer
     private String buffer = null;
     private String bufferType = null;
-    private List<BracketType> bracketStack = new ArrayList<>();
 
+    private List<BracketType> bracketStack = new ArrayList<>();
     private enum BracketType {
         PARENTHESES, BRACKETS, BRACES
     }
 
-    private TokenSequence generateTokens(String expr) {
-        /*if (expr.equals("[ [1, 2], [3, 4] ]")) new Exception("here").printStackTrace();
-        System.out.println("expr: _" + expr + "_");*/
+    private boolean insideChar = false;
+    private String charBuffer = null;
 
-        expr = expr + "ä";
+    private final String END_CHARACTER = "ä";
+    private TokenSequence generateTokens(String expr) {
+        expr = expr + END_CHARACTER;
         for (String c : expr.split("")) {
-            if (c.equals("ä")) {
+            if (c.equals(END_CHARACTER)) {
                 flushBuffer();
                 continue;
             }
@@ -91,6 +92,24 @@ public class Lexer {
                 continue;
             }
 
+            if (insideChar) {
+                if (c.equals("'")) {
+                    tokens.add(new Token(LITERAL, String.format("'%s'", charBuffer)));
+                    charBuffer = null;
+                    insideChar = false;
+                } else {
+                    charBuffer += c;
+                }
+                continue;
+            } else {
+                if (c.equals("'")) {
+                    flushBuffer();
+                    charBuffer = "";
+                    insideChar = true;
+                    continue;
+                }
+            }
+
             if (c.equals(",")) {
                 flushBuffer();
                 buffer = ",";
@@ -124,7 +143,6 @@ public class Lexer {
                 }
             }
         }
-        /*System.out.println("                                  =>      " + tokens);*/
         return tokens;
     }
 
