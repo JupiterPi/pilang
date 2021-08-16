@@ -14,7 +14,7 @@ public class Function extends Scope {
     private DataType returnType;
     private List<Instruction> instructions;
 
-    public Function(Scope parentScope) {
+    protected Function(Scope parentScope) {
         super(parentScope);
         this.reference = parentScope.getRegistry().registerFunction(this);
     }
