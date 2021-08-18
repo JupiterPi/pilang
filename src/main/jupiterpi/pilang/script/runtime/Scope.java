@@ -24,6 +24,9 @@ public class Scope {
     public List<Variable> getVariables() {
         return new ArrayList<>(variables);
     }
+    protected void clearVariables() {
+        variables = new ArrayList<>();
+    }
 
     public Variable getVariable(String name) {
         for (Variable variable : variables) {

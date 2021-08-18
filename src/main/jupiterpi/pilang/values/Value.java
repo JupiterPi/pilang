@@ -86,7 +86,7 @@ public abstract class Value {
         }
     }
 
-    public Value asFinal(Scope scope) {
+    public Value makeFinal(Scope scope) {
         DataType type = getType(scope);
         String value = get(scope);
         return new Value() {

@@ -30,7 +30,7 @@ public class TokenSequence extends ArrayList<Token> {
                 buffer.add(token);
             }
         }
-        subsequences.add(buffer);
+        if (!buffer.isEmpty()) subsequences.add(buffer);
         return subsequences;
     }
 

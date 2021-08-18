@@ -48,7 +48,7 @@ public class Function extends Scope {
         }
 
         if (returnValue == null) {
-            return new Value() {
+            returnValue = new Value() {
                 @Override
                 public DataType getType(Scope scope) {
                     return new DataType(DataType.BaseType.VOID);
@@ -58,9 +58,11 @@ public class Function extends Scope {
                     return "";
                 }
             };
-        } else {
-            return returnValue.asFinal(this);
         }
+
+        clearVariables();
+
+        return returnValue.makeFinal(this);
     }
 
     private Value returnValue = null;

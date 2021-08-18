@@ -1,0 +1,14 @@
+notice debug;
+
+void() test_a = void(){
+    debug.print("test successful!");
+};
+
+void() test_b = void(int() num) {
+    int n = num();
+    debug.print("number num(): ");
+    debug.print_int(n);
+};
+
+
+test3d.pi

@@ -12,7 +12,7 @@ public class ReturnInstruction extends Instruction {
 
     @Override
     public void execute(Scope scope) {
-        scope.returnValue(returnValue.asFinal(scope));
+        scope.returnValue(returnValue.makeFinal(scope));
     }
 
     @Override

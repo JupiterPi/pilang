@@ -33,7 +33,7 @@ public abstract class NativeFunction extends Function {
 
         List<Value> newParameters = new ArrayList<>();
         for (Value parameter : parameters) {
-            newParameters.add(parameter.asFinal(callingScope));
+            newParameters.add(parameter.makeFinal(callingScope));
         }
 
         Value returnValue = run(newParameters);

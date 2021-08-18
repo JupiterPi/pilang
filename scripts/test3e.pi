@@ -1,0 +1,39 @@
+notice debug;
+
+// test_a
+
+void() test_a = void(int() num) {
+    int n = num();
+    debug.print("number: ");
+    debug.print_int(n);
+};
+
+test_a(int(){
+    return 42;
+});
+
+debug.print("------");
+// test_b
+
+void() test_b = void(int() sum) {
+    int n = sum(5, 3);
+    debug.print("sum: ");
+    debug.print_int(n);
+};
+
+test_b(int(int a, int b) {
+    return a + b;
+});
+
+debug.print("------");
+// test_c
+
+int()() getFunction = int()() {
+	return int() {
+		return 69;
+	};
+};
+
+int()[] functions = [getFunction(), getFunction()];
+
+debug.print_int(functions[1]());
