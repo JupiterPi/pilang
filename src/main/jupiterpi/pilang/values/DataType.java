@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class DataType {
     public enum BaseType {
-        INT, FLOAT, BOOL, CHAR, VOID
+        INT, FLOAT, BOOL, CHAR, VOID, ANY
     }
 
     public enum Specification {
@@ -27,16 +27,6 @@ public class DataType {
     public DataType(BaseType baseType, List<Specification> specificationStack) {
         this.baseType = baseType;
         this.specificationStack = specificationStack;
-    }
-
-    public static DataType baseFromString(String str) {
-        BaseType baseType;
-        try {
-            baseType = BaseType.valueOf(str.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-        return new DataType(baseType);
     }
 
     public static DataType fromTokenSequence(TokenSequence tokens) {
@@ -59,6 +49,14 @@ public class DataType {
         }
 
         return new DataType(baseType, specificationStack);
+    }
+
+    public static BaseType baseFromString(String str) {
+        try {
+            return BaseType.valueOf(str.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     /* getters */
