@@ -2,6 +2,7 @@ package jupiterpi.pilang.script.runtime;
 
 import jupiterpi.pilang.script.instructions.Instruction;
 import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.FinalValue;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.functions.VariableHead;
 
@@ -48,28 +49,19 @@ public class Function extends Scope {
         }
 
         if (returnValue == null) {
-            returnValue = new Value() {
-                @Override
-                public DataType getType(Scope scope) {
-                    return new DataType(DataType.BaseType.VOID);
-                }
-                @Override
-                public String get(Scope scope) {
-                    return "";
-                }
-            };
+            returnValue = new FinalValue(new DataType(DataType.BaseType.VOID), "");
         }
 
         clearVariables();
 
-        return returnValue.makeFinal(this);
+        return returnValue;
     }
 
-    private Value returnValue = null;
+    private FinalValue returnValue = null;
 
     @Override
     public void returnValue(Value value) {
-        returnValue = value;
+        returnValue = value.makeFinal(this);
     }
 
     @Override

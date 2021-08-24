@@ -86,7 +86,7 @@ public abstract class Value {
         }
     }
 
-    public Value makeFinal(Scope scope) {
+    public FinalValue makeFinal(Scope scope) {
         return new FinalValue(this, scope);
     }
 }
