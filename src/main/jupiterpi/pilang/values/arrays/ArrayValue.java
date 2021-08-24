@@ -29,9 +29,9 @@ public class ArrayValue extends Value {
             }
         }
 
-        if (type == null) {
+        /*if (type == null) {
             type = new DataType(DataType.BaseType.ANY);
-        }
+        }*/
         return type.sp_asArray();
     }
 
