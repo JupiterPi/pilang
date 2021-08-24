@@ -36,12 +36,13 @@ public class Parser {
                 TokenSequence expr = parts.get(1);
 
                 Value value = new Expression(expr);
-                String name = head.get(head.size()-1).getContent();
-                if (head.size() > 1) {
+                if (head.contains(new Token(Token.Type.TYPE))) {
                     DataType type = DataType.fromTokenSequence(head.subsequence(0, head.size()-1));
+                    String name = head.get(head.size()-1).getContent();
                     instruction = new DeclareVariableInstruction(type, name, value);
                 } else {
-                    instruction = new ReassignVariableInstruction(name, value);
+                    TokenSequence reference = new TokenSequence(head);
+                    instruction = new ReassignVariableInstruction(reference, value);
                 }
 
                 insideHeader = false;

@@ -87,18 +87,6 @@ public abstract class Value {
     }
 
     public Value makeFinal(Scope scope) {
-        DataType type = getType(scope);
-        String value = get(scope);
-        return new Value() {
-            @Override
-            public DataType getType(Scope scope) {
-                return type;
-            }
-
-            @Override
-            public String get(Scope scope) {
-                return value;
-            }
-        };
+        return new FinalValue(this, scope);
     }
 }

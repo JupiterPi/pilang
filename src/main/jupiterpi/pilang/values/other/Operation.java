@@ -1,6 +1,8 @@
-package jupiterpi.pilang.values;
+package jupiterpi.pilang.values.other;
 
 import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.Value;
 
 public class Operation extends Value {
     private String operator;

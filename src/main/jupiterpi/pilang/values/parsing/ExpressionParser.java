@@ -3,12 +3,13 @@ package jupiterpi.pilang.values.parsing;
 import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
-import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.*;
 import jupiterpi.pilang.values.arrays.ArrayCallWrapper;
 import jupiterpi.pilang.values.arrays.ArrayLiteral;
 import jupiterpi.pilang.values.functions.FunctionCallWrapper;
 import jupiterpi.pilang.values.functions.FunctionLiteral;
+import jupiterpi.pilang.values.other.Literal;
+import jupiterpi.pilang.values.other.VariableReference;
 
 import java.util.ArrayList;
 import java.util.List;

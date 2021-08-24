@@ -4,7 +4,7 @@ import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
-import jupiterpi.pilang.values.Operation;
+import jupiterpi.pilang.values.other.Operation;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 

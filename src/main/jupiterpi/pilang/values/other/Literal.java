@@ -1,15 +1,13 @@
-package jupiterpi.pilang.values;
+package jupiterpi.pilang.values.other;
 
-import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.FinalValue;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Literal extends Value {
+public class Literal extends FinalValue {
     private final List<String> numbers = Arrays.asList("0123456789".split(""));
-
-    private DataType type;
-    private String value;
 
     public Literal(String value) {
         if (value.startsWith("'")) {
@@ -35,16 +33,6 @@ public class Literal extends Value {
             if (lc.equals(c)) return true;
         }
         return false;
-    }
-
-    @Override
-    public DataType getType(Scope scope) {
-        return type;
-    }
-
-    @Override
-    public String get(Scope scope) {
-        return value;
     }
 
     @Override

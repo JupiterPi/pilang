@@ -1,7 +1,9 @@
-package jupiterpi.pilang.values;
+package jupiterpi.pilang.values.other;
 
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;
+import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.Value;
 
 public class VariableReference extends Value {
     private String variableName;
