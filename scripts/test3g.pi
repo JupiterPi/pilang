@@ -1,6 +1,6 @@
 notice debug;
 
-if (false) {
+if (42 <= 69) {
 	debug.print("apparently true");
 } else {
 	debug.print("apparently not quite true");

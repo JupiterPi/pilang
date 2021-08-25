@@ -29,7 +29,7 @@ public class Lexer {
     /* lexer */
 
     // character types
-    private final List<String> operators = Arrays.asList("+-*/&|=".split(""));
+    private final List<String> operators = Arrays.asList("+-*/&|=<>!".split(""));
     private final List<String> sequence = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789".split(""));
     private final List<String> sequenceNumberStart = Arrays.asList("0123456789".split(""));
     private final List<String> sequenceTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(""));

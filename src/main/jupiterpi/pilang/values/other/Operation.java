@@ -4,7 +4,14 @@ import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Operation extends Value {
+    private List<String> comparisonOperators = Arrays.asList("==", "!=", "<", ">", "<=", ">=");
+    private List<String> equalOperators = Arrays.asList("==", "!=");
+    private List<String> numericComparisonOperators = Arrays.asList("<", ">", "<=", ">=");
+
     private String operator;
     private Value a;
     private Value b;
@@ -18,10 +25,12 @@ public class Operation extends Value {
     @Override
     public String get(Scope scope) {
         if (isSameType(scope)) {
-            if (operator.equals("==")) {
-                String a = this.a.get(scope);
-                String b = this.b.get(scope);
-                return Boolean.toString(a.equals(b));
+            if (listContains(comparisonOperators, operator)) {
+                if (listContains(equalOperators, operator)) {
+                    return Boolean.toString(calculateEqual(scope));
+                } else {
+                    return Boolean.toString(calculateComparison(scope));
+                }
             } else {
                 switch (getType(scope).toString()) {
                     case "int": return Integer.toString((int) calculateNumber(scope));
@@ -48,7 +57,7 @@ public class Operation extends Value {
 
     @Override
     public DataType getType(Scope scope) {
-        if (operator.equals("==")) return new DataType(DataType.BaseType.BOOL);
+        if (listContains(comparisonOperators, operator)) return new DataType(DataType.BaseType.BOOL);
         if (isSameType(scope)) {
             return a.getType(scope);
         } else {
@@ -58,6 +67,13 @@ public class Operation extends Value {
     }
     private boolean isSameType(Scope scope) {
         return a.getType(scope).equals(b.getType(scope));
+    }
+
+    private boolean calculateEqual(Scope scope) {
+        String a = this.a.get(scope);
+        String b = this.b.get(scope);
+        boolean result = a.equals(b);
+        return operator.equals("==") ? result : !result;
     }
 
     private float calculateNumber(Scope scope) {
@@ -73,6 +89,19 @@ public class Operation extends Value {
         return 0;
     }
 
+    private boolean calculateComparison(Scope scope) {
+        float a = Float.parseFloat(this.a.get(scope));
+        float b = Float.parseFloat(this.b.get(scope));
+        switch (operator) {
+            case "<": return a < b;
+            case ">": return a > b;
+            case "<=": return a <= b;
+            case ">=": return a >= b;
+        }
+        new Exception("invalid operator: " + operator).printStackTrace();
+        return false;
+    }
+
     private boolean calculateLogical(Scope scope) {
         boolean a = Boolean.parseBoolean(this.a.get(scope));
         boolean b = Boolean.parseBoolean(this.b.get(scope));
@@ -81,6 +110,13 @@ public class Operation extends Value {
             case "||": return a || b;
         }
         new Exception("invalid operator: " + operator).printStackTrace();
+        return false;
+    }
+
+    private boolean listContains(List<String> list, String c) {
+        for (String lc : list) {
+            if (lc.equals(c)) return true;
+        }
         return false;
     }
 
