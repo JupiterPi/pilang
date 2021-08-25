@@ -18,6 +18,32 @@ public class FinalValue extends Value {
 
     protected FinalValue() {}
 
+    /* typed constructors */
+
+    public static FinalValue fromInt(int value) {
+        return new FinalValue(new DataType(DataType.BaseType.INT), Integer.toString(value));
+    }
+
+    public static FinalValue fromFloat(float value) {
+        return new FinalValue(new DataType(DataType.BaseType.INT), Float.toString(value));
+    }
+
+    public static FinalValue fromBool(boolean value) {
+        return new FinalValue(new DataType(DataType.BaseType.INT), Boolean.toString(value));
+    }
+
+    public static FinalValue fromChar(char value) {
+        return new FinalValue(new DataType(DataType.BaseType.INT), String.format("'%s'", value));
+    }
+
+    public static FinalValue formChar(String value) {
+        return new FinalValue(new DataType(DataType.BaseType.INT), String.format("'%s'", value));
+    }
+
+    public static FinalValue fromVoid() {
+        return new FinalValue(new DataType(DataType.BaseType.VOID), "");
+    }
+
     /* runtime getters */
 
     @Override
