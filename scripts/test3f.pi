@@ -1,0 +1,45 @@
+notice debug;
+
+char[] test1 = "abc";
+
+debug.println();
+debug.print("test1: ");
+debug.print(test1);
+
+test1[1] = 'B';
+
+debug.println();
+debug.print("test1: ");
+debug.print(test1);
+
+// .....
+
+char[][] test2 = ["abc", "def", "ghi"];
+
+debug.println();
+debug.print("test2: ");
+debug.print(test2[0]);
+debug.print(test2[1]);
+debug.print(test2[2]);
+
+test2[2][1] = 'H';
+
+debug.println();
+debug.print("test2: ");
+debug.print(test2[0]);
+debug.print(test2[1]);
+debug.print(test2[2]);
+
+// .....
+
+int test3 = 42;
+
+debug.println();
+debug.print("test3: ");
+debug.print_int(test3);
+
+test3 = 69;
+
+debug.println();
+debug.print("test3: ");
+debug.print_int(test3);

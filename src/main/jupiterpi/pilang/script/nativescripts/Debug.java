@@ -25,6 +25,14 @@ public class Debug extends NativeScript {
                 return null;
             }
         });
+
+        addFunction("println", "void", new NativeFunction(this) {
+            @Override
+            protected Value run(List<Value> parameters) {
+                System.out.println("[DEBUG] ");
+                return null;
+            }
+        });
     }
 
     private void registerDebugFunction(String type) {

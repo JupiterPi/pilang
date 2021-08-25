@@ -5,6 +5,7 @@ import jupiterpi.pilang.script.parser.Token;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Function;
 import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.values.arrays.ArrayValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,9 @@ public abstract class Value {
             return null;
         }
     }
+    public ArrayValue getArrayValue(Scope scope) {
+        return new ArrayValue(getArray(scope));
+    }
 
     public Function getFunction(Scope scope) {
         if (getType(scope).isFunction()) {
@@ -88,5 +92,10 @@ public abstract class Value {
 
     public FinalValue makeFinal(Scope scope) {
         return new FinalValue(this, scope);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Value{%s}", get(null));
     }
 }

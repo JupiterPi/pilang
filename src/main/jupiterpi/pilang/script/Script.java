@@ -79,6 +79,7 @@ public class Script extends Scope {
         this.availableScripts = new ArrayList<>(availableScripts);
         super.execute(instructions);
 
+        System.out.println();
         System.out.println("variables in script " + name + ": ");
         for (Variable variable : getVariables()) {
             System.out.println(variable);

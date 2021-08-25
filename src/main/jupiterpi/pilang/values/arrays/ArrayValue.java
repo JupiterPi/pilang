@@ -11,9 +11,17 @@ import java.util.List;
 public class ArrayValue extends Value {
     protected List<Value> values;
 
-    protected ArrayValue() { this.values = new ArrayList<>(); }
-    protected ArrayValue(List<Value> values) {
+    public ArrayValue() { this.values = new ArrayList<>(); }
+    public ArrayValue(List<Value> values) {
         this.values = values;
+    }
+
+    public List<Value> getValues() {
+        return values;
+    }
+
+    public void addValue(Value value) {
+        values.add(value);
     }
 
     @Override
