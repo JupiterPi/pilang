@@ -11,7 +11,7 @@ public class Scope {
     private Scope parentScope = null;
 
     protected Scope() {}
-    protected Scope(Scope parentScope) {
+    public Scope(Scope parentScope) {
         this.parentScope = parentScope;
     }
 

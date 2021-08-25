@@ -1,0 +1,9 @@
+notice debug;
+
+if (false) {
+	debug.print("apparently true");
+} else {
+	debug.print("apparently not quite true");
+}
+
+debug.print("finished!");

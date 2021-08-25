@@ -8,7 +8,8 @@ public class Token {
         TYPE, ASSIGN, IDENTIFIER,
         NOTICE, INTEGRATE,
         COMMA, SEMICOLON,
-        RETURN
+        RETURN,
+        IF, ELSE
     }
 
     private Type type;

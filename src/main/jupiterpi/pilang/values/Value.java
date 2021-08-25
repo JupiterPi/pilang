@@ -33,7 +33,7 @@ public abstract class Value {
     }
 
     public boolean getBool(Scope scope) {
-        if (getType(scope).equals(new DataType(DataType.BaseType.FLOAT))) {
+        if (getType(scope).equals(new DataType(DataType.BaseType.BOOL))) {
             return Boolean.parseBoolean(get(scope));
         } else {
             new Exception(String.format("tried to get bool value of %s %s", getType(scope), get(scope))).printStackTrace();
