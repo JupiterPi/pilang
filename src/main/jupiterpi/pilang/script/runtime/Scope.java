@@ -20,6 +20,9 @@ public class Scope {
             instruction.execute(this);
         }
     }
+    public void execute(Instruction instruction) {
+        instruction.execute(this);
+    }
 
     public List<Variable> getVariables() {
         return new ArrayList<>(variables);

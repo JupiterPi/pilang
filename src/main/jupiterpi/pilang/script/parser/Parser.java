@@ -1,6 +1,7 @@
 package jupiterpi.pilang.script.parser;
 
 import jupiterpi.pilang.script.instructions.*;
+import jupiterpi.pilang.script.instructions.structures.ForInstruction;
 import jupiterpi.pilang.script.instructions.structures.IfInstruction;
 import jupiterpi.pilang.script.instructions.structures.WhileInstruction;
 import jupiterpi.pilang.values.DataType;
@@ -144,13 +145,46 @@ public class Parser {
             return instructions;
         }
 
+        if (line.get(0).getType() == Token.Type.FOR) {
+            /*Tokens:
+                0: for
+                1: (initialization; condition; counter)
+                2: {body}
+                */
+
+            Instruction initialization;
+            Value condition;
+            Instruction counter;
+            List<Instruction> body;
+
+            Token conditionToken = line.get(1);
+            if (conditionToken.getType() != Token.Type.EXPRESSION) new Exception("parens expression required after 'while': " + line).printStackTrace();
+            List<TokenSequence> parts = new Lexer(conditionToken.getContent()).getTokens().split(new Token(Token.Type.SEMICOLON));
+            if (parts.size() != 3) new Exception("parens expression after 'while' has to contain 3 instructions").printStackTrace();
+            initialization = parseInlineInstruction(parts.get(0)).get(0);
+            condition = new Expression(parts.get(1));
+            counter = parseInlineInstruction(parts.get(2)).get(0);
+
+            if (line.get(2).getType() != Token.Type.BRACES_EXPRESSION) new Exception("braces expression required after for condition: " + line).printStackTrace();
+            body = parseBraces(line.get(2));
+
+            instructions.add(new ForInstruction(initialization, condition, counter, body));
+            TokenSequence rest = line.subsequence(3);
+            if (rest.size() > 0) instructions.addAll(parseLine(rest));
+            return instructions;
+        }
+
         // FunctionCall          !!!!! last option !!!!!
         instructions.add(new FunctionCallInstruction(line));
         return instructions;
     }
 
     private List<Instruction> parseBraces(Token token) {
-        List<TokenSequence> lines = new Lexer(token.getContent()).getTokens().split(new Token(Token.Type.SEMICOLON));
+        return parseInlineInstruction(new Lexer(token.getContent()).getTokens());
+    }
+
+    private List<Instruction> parseInlineInstruction(TokenSequence tokens) {
+        List<TokenSequence> lines = tokens.split(new Token(Token.Type.SEMICOLON));
         return new Parser(lines).getInstructions();
     }
 }

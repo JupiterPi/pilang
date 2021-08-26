@@ -191,6 +191,7 @@ public class Lexer {
                             case "if": type = IF; break;
                             case "else": type = ELSE; break;
                             case "while": type = WHILE; break;
+                            case "for": type = FOR; break;
                             case "true": case "false": type = LITERAL; break;
                             default: type = IDENTIFIER;
                         }

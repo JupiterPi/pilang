@@ -13,3 +13,14 @@ while (i < 3) {
 	debug.print_int(i);
 	i = i + 1;
 }
+
+debug.print("after: ");
+debug.print_int(i);
+
+debug.print("for loop:");
+for (int i = 0; i < 3; i = i+1) {
+	debug.print_int(i);
+}
+
+debug.print("after: ");
+debug.print_int(i);
