@@ -9,7 +9,7 @@ public class Token {
         NOTICE, INTEGRATE,
         COMMA, SEMICOLON,
         RETURN,
-        IF, ELSE
+        IF, ELSE, WHILE
     }
 
     private Type type;

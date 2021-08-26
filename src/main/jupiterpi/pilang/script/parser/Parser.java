@@ -1,6 +1,8 @@
 package jupiterpi.pilang.script.parser;
 
 import jupiterpi.pilang.script.instructions.*;
+import jupiterpi.pilang.script.instructions.structures.IfInstruction;
+import jupiterpi.pilang.script.instructions.structures.WhileInstruction;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.Expression;
@@ -21,8 +23,9 @@ public class Parser {
 
     /* parser */
 
-    private boolean insideHeader = true;
+    private boolean insideHeader;
     private void parseInstructions(List<TokenSequence> lines) {
+        insideHeader = true;
         for (TokenSequence line : lines) {
             if (line.isEmpty()) continue;
             List<Instruction> parsedInstructions = parseLine(line);
@@ -114,6 +117,29 @@ public class Parser {
 
             instructions.add(new IfInstruction(condition, positiveBody, negativeBody));
             TokenSequence rest = line.subsequence(restIndex);
+            if (rest.size() > 0) instructions.addAll(parseLine(rest));
+            return instructions;
+        }
+
+        if (line.get(0).getType() == Token.Type.WHILE) {
+            /*Tokens:
+                0: while
+                1: (condition)
+                2: {body}
+                */
+
+            Value condition;
+            List<Instruction> body;
+
+            Token conditionToken = line.get(1);
+            if (conditionToken.getType() != Token.Type.EXPRESSION) new Exception("parens expression required after 'while': " + line).printStackTrace();
+            condition = new Expression(conditionToken.getContent());
+
+            if (line.get(2).getType() != Token.Type.BRACES_EXPRESSION) new Exception("braces expression required after while condition: " + line).printStackTrace();
+            body = parseBraces(line.get(2));
+
+            instructions.add(new WhileInstruction(condition, body));
+            TokenSequence rest = line.subsequence(3);
             if (rest.size() > 0) instructions.addAll(parseLine(rest));
             return instructions;
         }

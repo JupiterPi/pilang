@@ -190,6 +190,7 @@ public class Lexer {
                             case "return": type = RETURN; break;
                             case "if": type = IF; break;
                             case "else": type = ELSE; break;
+                            case "while": type = WHILE; break;
                             case "true": case "false": type = LITERAL; break;
                             default: type = IDENTIFIER;
                         }

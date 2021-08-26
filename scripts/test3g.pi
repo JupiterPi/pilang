@@ -7,3 +7,9 @@ if (42 <= 69) {
 }
 
 debug.print("finished!");
+
+int i = 0;
+while (i < 3) {
+	debug.print_int(i);
+	i = i + 1;
+}
