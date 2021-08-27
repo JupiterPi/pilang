@@ -37,6 +37,16 @@ public class Parser {
     private List<Instruction> parseLine(TokenSequence line) {
         List<Instruction> instructions = new ArrayList<>();
 
+        // ReassignVariable with INCREMENT
+        if (line.contains(new Token(Token.Type.INCREMENT))) {
+            Token incrementToken = line.get(line.size()-1);
+            if (incrementToken.getType() != Token.Type.INCREMENT) new Exception("increment statement has to end on ++ or --").printStackTrace();
+            TokenSequence reference = line.subsequence(0, line.size()-1);
+
+            instructions.add(new ReassignVariableInstruction(reference, incrementToken.getContent(), null));
+            return instructions;
+        }
+
         // DeclareVariable, ReassignVariable
         if (line.contains(new Token(Token.Type.ASSIGN))) {
             List<TokenSequence> parts = line.split(new Token(Token.Type.ASSIGN));
@@ -52,8 +62,9 @@ public class Parser {
                 instructions.add(new DeclareVariableInstruction(type, name, value));
             } else {
                 TokenSequence reference = new TokenSequence(head);
+                Token operatorToken = line.get(line.firstIndexOf(new Token(Token.Type.ASSIGN)));
 
-                instructions.add(new ReassignVariableInstruction(reference, value));
+                instructions.add(new ReassignVariableInstruction(reference, operatorToken.getContent(), value));
             }
 
             insideHeader = false;

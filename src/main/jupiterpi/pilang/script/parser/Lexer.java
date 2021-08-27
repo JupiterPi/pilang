@@ -169,12 +169,16 @@ public class Lexer {
         return -1;
     }
 
+    private final List<String> assignOperators = Arrays.asList("=", "+=", "-=", "*=", "/=");
+    private final List<String> incrementOperators = Arrays.asList("++", "--");
+
     private void flushBuffer() {
         if (buffer == null) return;
         Type type = null;
         switch (bufferType) {
             case "operator":
-                if (buffer.equals("=")) type = ASSIGN;
+                if (listContains(assignOperators, buffer)) type = ASSIGN;
+                else if (listContains(incrementOperators, buffer)) type = INCREMENT;
                 else type = OPERATOR;
                 break;
             case "sequence":

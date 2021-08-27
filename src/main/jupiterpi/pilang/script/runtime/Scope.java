@@ -24,7 +24,7 @@ public class Scope {
         instruction.execute(this);
     }
 
-    public List<Variable> getVariables() {
+    public List<Variable> getImmediateVariables() {
         return new ArrayList<>(variables);
     }
     protected void clearVariables() {

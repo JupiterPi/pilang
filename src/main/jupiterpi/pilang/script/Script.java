@@ -81,7 +81,7 @@ public class Script extends Scope {
 
         System.out.println();
         System.out.println("variables in script " + name + ": ");
-        for (Variable variable : getVariables()) {
+        for (Variable variable : getImmediateVariables()) {
             System.out.println(variable);
         }
     }

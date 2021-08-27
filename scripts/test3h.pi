@@ -1,0 +1,18 @@
+notice debug;
+
+debug.print("for loop:");
+for (int i = 0; i < 3; i++) {
+	debug.print_int(i);
+}
+
+debug.print("int a:");
+int a = 5;
+debug.print_int(a);
+a += 3;
+debug.print_int(a);
+
+debug.print("float b:");
+float b = 5.0;
+debug.print_float(b);
+b *= 1.5;
+debug.print_float(b);

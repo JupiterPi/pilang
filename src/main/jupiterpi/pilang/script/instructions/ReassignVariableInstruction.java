@@ -8,6 +8,7 @@ import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.FinalValue;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.arrays.ArrayValue;
+import jupiterpi.pilang.values.other.Operation;
 import jupiterpi.pilang.values.parsing.Expression;
 import jupiterpi.tools.util.AppendingList;
 
@@ -16,17 +17,37 @@ import java.util.List;
 
 public class ReassignVariableInstruction extends Instruction {
     private TokenSequence reference;
+    private String operator;
     private Value value;
 
-    public ReassignVariableInstruction(TokenSequence reference, Value value) {
+    public ReassignVariableInstruction(TokenSequence reference, String operator, Value value) {
         this.reference = reference;
+        this.operator = operator;
         this.value = value;
     }
 
     @Override
     public void execute(Scope scope) {
         Variable variable = scope.getVariable(reference.get(0).getContent());
-        Value targetValue = value;
+
+        /* modify assigning based on operator */
+
+        Value targetValue;
+
+        // =, +=, -=, *=, /=, ++, --
+        switch (operator) {
+            case "=": targetValue = value; break;
+            case "+=": targetValue = new Operation(new Expression(reference), "+", value); break;
+            case "-=": targetValue = new Operation(new Expression(reference), "-", value); break;
+            case "*=": targetValue = new Operation(new Expression(reference), "*", value); break;
+            case "/=": targetValue = new Operation(new Expression(reference), "/", value); break;
+            case "++": targetValue = new Operation(new Expression(reference), "+", FinalValue.fromInt(1)); break;
+            case "--": targetValue = new Operation(new Expression(reference), "-", FinalValue.fromInt(1)); break;
+            default:
+                new Exception("invalid operator: " + operator).printStackTrace();
+                targetValue = value;
+                break;
+        }
 
         // non-array variables
         if (!variable.getType(scope).isArray()) {
