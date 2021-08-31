@@ -1,5 +1,6 @@
 package jupiterpi.pilang.script;
 
+import jupiterpi.pilang.Main;
 import jupiterpi.pilang.script.instructions.Instruction;
 import jupiterpi.pilang.script.parser.*;
 import jupiterpi.pilang.script.runtime.ReferenceRegistry;
@@ -79,10 +80,12 @@ public class Script extends Scope {
         this.availableScripts = new ArrayList<>(availableScripts);
         super.execute(instructions);
 
-        System.out.println();
-        System.out.println("variables in script " + name + ": ");
-        for (Variable variable : getImmediateVariables()) {
-            System.out.println(variable);
+        if (Main.printVariables) {
+            System.out.println();
+            System.out.println("variables in script " + name + ": ");
+            for (Variable variable : getImmediateVariables()) {
+                System.out.println(variable);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package jupiterpi.pilang.script.nativescripts;
 
+import jupiterpi.pilang.Main;
 import jupiterpi.pilang.script.runtime.ReferenceRegistry;
 import jupiterpi.pilang.values.Value;
 
@@ -21,7 +22,7 @@ public class Debug extends NativeScript {
                 for (Value character : parameters.get(0).getArray(this)) {
                     str += character.getChar(this);
                 }
-                System.out.printf("[DEBUG] %s%n", str);
+                print(str);
                 return null;
             }
         });
@@ -29,7 +30,7 @@ public class Debug extends NativeScript {
         addFunction("println", "void", new NativeFunction(this) {
             @Override
             protected Value run(List<Value> parameters) {
-                System.out.println("[DEBUG] ");
+                print("");
                 return null;
             }
         });
@@ -41,9 +42,15 @@ public class Debug extends NativeScript {
             @Override
             protected Value run(List<Value> parameters) {
                 String str = parameters.get(0).get(this);
-                System.out.printf("[DEBUG] %s%n", str);
+                print(str);
                 return null;
             }
         });
+    }
+
+    private void print(String text) {
+        String str = text;
+        if (Main.displayDebugPrefix) str = "[DEBUG] " + text;
+        System.out.println(str);
     }
 }
