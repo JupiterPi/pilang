@@ -1,3 +1,3 @@
 # pilang - Pi Programming Language
 
-Coming soon...
+See the [wiki](https://github.com/JupiterPi/pilang/wiki) for more information. 
