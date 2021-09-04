@@ -4,6 +4,7 @@ import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.other.Literal;
 import jupiterpi.pilang.values.other.Operation;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
@@ -85,6 +86,9 @@ public class Expression extends Value {
                 if (item instanceof OperatorItem) {
                     if (operator == null) {
                         operator = ((OperatorItem) item).getOperator();
+                        if (a == null && (operator.equals("+") || operator.equals("-"))) {
+                            a = new Literal("0");
+                        }
                     } else {
                         new Exception("no space for operator: " + ((OperatorItem) item).getOperator()).printStackTrace();
                     }

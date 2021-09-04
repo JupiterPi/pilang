@@ -1,0 +1,4 @@
+notice debug;
+
+int foo = 2 * (-5);
+debug.print_int(foo);
