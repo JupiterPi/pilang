@@ -3,44 +3,45 @@ package jupiterpi.pilang.values.parsing.precedence;
 import jupiterpi.pilang.values.parsing.Expression;
 import jupiterpi.pilang.values.parsing.signs.Sign;
 import jupiterpi.pilang.values.parsing.signs.OperatorSign;
+import jupiterpi.pilang.values.parsing.signs.SignSequence;
 import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionPrecedencer {
-    private List<Sign> signs;
+    private SignSequence signs;
 
-    public ExpressionPrecedencer(List<Sign> signs) {
-        generateItemsList(signs);
+    public ExpressionPrecedencer(SignSequence signs) {
+        generateSignsList(signs);
         determinePrecedence();
         if (isOnlyPrecedence()) {
             this.signs = signs;
         } else {
-            this.signs = generateNewItems();
+            this.signs = generateNewSigns();
         }
     }
 
-    public List<Sign> getItems() {
+    public SignSequence getSigns() {
         return signs;
     }
 
     /* precedencer */
 
-    private List<PrecedenceItem> precedenceItems = new ArrayList<>();
+    private List<PrecedenceSign> precedenceSigns = new ArrayList<>();
 
-    private void generateItemsList(List<Sign> signs) {
+    private void generateSignsList(SignSequence signs) {
         for (Sign sign : signs) {
-            precedenceItems.add(new PrecedenceItem(sign));
+            precedenceSigns.add(new PrecedenceSign(sign));
         }
     }
 
     private void determinePrecedence() {
-        for (int i = 0; i < precedenceItems.size(); i++) {
-            PrecedenceItem precedenceItem = precedenceItems.get(i);
-            if (!(precedenceItem.getItem() instanceof OperatorSign)) continue;
+        for (int i = 0; i < precedenceSigns.size(); i++) {
+            PrecedenceSign precedenceSign = precedenceSigns.get(i);
+            if (!(precedenceSign.getSign() instanceof OperatorSign)) continue;
 
-            if (precedenceItem.hasPrecedence()) {
+            if (precedenceSign.hasPrecedence()) {
                 applyPrecedence(i-1);
                 applyPrecedence(i+1);
             }
@@ -48,42 +49,42 @@ public class ExpressionPrecedencer {
     }
 
     private void applyPrecedence(int i) {
-        PrecedenceItem precedenceItem = precedenceItems.get(i);
-        if (precedenceItem.getItem() instanceof ValueSign) {
-            precedenceItem.setPrecedence(true);
+        PrecedenceSign precedenceSign = precedenceSigns.get(i);
+        if (precedenceSign.getSign() instanceof ValueSign) {
+            precedenceSign.setPrecedence(true);
         } else {
             new Exception("invalid operator-value order").printStackTrace();
         }
     }
 
     private boolean isOnlyPrecedence() {
-        for (PrecedenceItem item : precedenceItems) {
-            if (!item.hasPrecedence()) return false;
+        for (PrecedenceSign sign : precedenceSigns) {
+            if (!sign.hasPrecedence()) return false;
         }
         return true;
     }
 
-    private List<Sign> generateNewItems() {
-        List<Sign> signs = new ArrayList<>();
+    private SignSequence generateNewSigns() {
+        SignSequence signs = new SignSequence();
 
         boolean insidePrecedence = false;
-        List<Sign> buffer = new ArrayList<>();
-        for (PrecedenceItem item : precedenceItems) {
+        SignSequence buffer = new SignSequence();
+        for (PrecedenceSign sign : precedenceSigns) {
             if (insidePrecedence) {
-                if (item.hasPrecedence()) {
-                    buffer.add(item.getItem());
+                if (sign.hasPrecedence()) {
+                    buffer.add(sign.getSign());
                 } else {
                     signs.add(new ValueSign(new Expression(buffer)));
-                    buffer = new ArrayList<>();
-                    signs.add(item.getItem());
+                    buffer = new SignSequence();
+                    signs.add(sign.getSign());
                     insidePrecedence = false;
                 }
             } else {
-                if (item.hasPrecedence()) {
-                    buffer.add(item.getItem());
+                if (sign.hasPrecedence()) {
+                    buffer.add(sign.getSign());
                     insidePrecedence = true;
                 } else {
-                    signs.add(item.getItem());
+                    signs.add(sign.getSign());
                 }
             }
         }

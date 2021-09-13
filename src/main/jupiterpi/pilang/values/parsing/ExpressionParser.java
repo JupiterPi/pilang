@@ -12,19 +12,20 @@ import jupiterpi.pilang.values.other.Literal;
 import jupiterpi.pilang.values.other.VariableReference;
 import jupiterpi.pilang.values.parsing.signs.OperatorSign;
 import jupiterpi.pilang.values.parsing.signs.Sign;
+import jupiterpi.pilang.values.parsing.signs.SignSequence;
 import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionParser {
-    private List<Sign> signs = new ArrayList<>();
+    private SignSequence signs = new SignSequence();
 
     public ExpressionParser(TokenSequence tokens) {
         parseTokens(tokens);
     }
 
-    public List<Sign> getItems() {
+    public SignSequence getSigns() {
         return signs;
     }
 

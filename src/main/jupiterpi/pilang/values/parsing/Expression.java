@@ -4,15 +4,14 @@ import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.other.Literal;
 import jupiterpi.pilang.values.other.Operation;
-import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 import jupiterpi.pilang.values.parsing.signs.OperatorSign;
 import jupiterpi.pilang.values.parsing.signs.Sign;
+import jupiterpi.pilang.values.parsing.signs.SignSequence;
 import jupiterpi.pilang.values.parsing.signs.ValueSign;
-
-import java.util.List;
 
 public class Expression extends Value {
     private Value value;
@@ -27,8 +26,8 @@ public class Expression extends Value {
         createFromTokenSequence(tokens);
     }
 
-    public Expression(List<Sign> signs) {
-        createFromItems(signs);
+    public Expression(SignSequence signs) {
+        createFromSigns(signs);
     }
 
     // constructor methods
@@ -41,16 +40,16 @@ public class Expression extends Value {
 
     private void createFromTokenSequence(TokenSequence tokens) {
         ExpressionParser parser = new ExpressionParser(tokens);
-        List<Sign> signs = parser.getItems();
+        SignSequence signs = parser.getSigns();
 
         ExpressionPrecedencer precedencer = new ExpressionPrecedencer(signs);
-        signs = precedencer.getItems();
+        signs = precedencer.getSigns();
 
-        createFromItems(signs);
+        createFromSigns(signs);
     }
 
-    private void createFromItems(List<Sign> signs) {
-        value = parseItems(signs);
+    private void createFromSigns(SignSequence signs) {
+        value = parseSigns(signs);
     }
 
     // Value getters
@@ -72,7 +71,7 @@ public class Expression extends Value {
     private String operator = null;
     private Value b = null;
 
-    private Value parseItems(List<Sign> signs) {
+    private Value parseSigns(SignSequence signs) {
         for (Sign sign : signs) {
             if (sign instanceof ValueSign) {
                 Value value = ((ValueSign) sign).getValue();

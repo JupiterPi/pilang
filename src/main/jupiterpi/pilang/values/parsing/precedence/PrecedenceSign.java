@@ -7,13 +7,13 @@ import jupiterpi.pilang.values.parsing.signs.ValueSign;
 import java.util.Arrays;
 import java.util.List;
 
-public class PrecedenceItem {
+public class PrecedenceSign {
     private final List<String> precedenceOperators = Arrays.asList("*", "/");
 
     private Sign sign;
     private boolean precedence;
 
-    public PrecedenceItem(Sign sign) {
+    public PrecedenceSign(Sign sign) {
         this.sign = sign;
         if (sign instanceof ValueSign) {
             this.precedence = false;
@@ -29,7 +29,7 @@ public class PrecedenceItem {
         return false;
     }
 
-    public Sign getItem() {
+    public Sign getSign() {
         return sign;
     }
 
