@@ -1,9 +1,9 @@
-package jupiterpi.pilang.values.parsing;
+package jupiterpi.pilang.values.parsing.signs;
 
-public class OperatorItem implements Item {
+public class OperatorSign implements Sign {
     private String operator;
 
-    public OperatorItem(String operator) {
+    public OperatorSign(String operator) {
         this.operator = operator;
     }
 

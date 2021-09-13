@@ -1,44 +1,44 @@
 package jupiterpi.pilang.values.parsing.precedence;
 
 import jupiterpi.pilang.values.parsing.Expression;
-import jupiterpi.pilang.values.parsing.Item;
-import jupiterpi.pilang.values.parsing.OperatorItem;
-import jupiterpi.pilang.values.parsing.ValueItem;
+import jupiterpi.pilang.values.parsing.signs.Sign;
+import jupiterpi.pilang.values.parsing.signs.OperatorSign;
+import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionPrecedencer {
-    private List<Item> items;
+    private List<Sign> signs;
 
-    public ExpressionPrecedencer(List<Item> items) {
-        generateItemsList(items);
+    public ExpressionPrecedencer(List<Sign> signs) {
+        generateItemsList(signs);
         determinePrecedence();
         if (isOnlyPrecedence()) {
-            this.items = items;
+            this.signs = signs;
         } else {
-            this.items = generateNewItems();
+            this.signs = generateNewItems();
         }
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<Sign> getItems() {
+        return signs;
     }
 
     /* precedencer */
 
     private List<PrecedenceItem> precedenceItems = new ArrayList<>();
 
-    private void generateItemsList(List<Item> items) {
-        for (Item item : items) {
-            precedenceItems.add(new PrecedenceItem(item));
+    private void generateItemsList(List<Sign> signs) {
+        for (Sign sign : signs) {
+            precedenceItems.add(new PrecedenceItem(sign));
         }
     }
 
     private void determinePrecedence() {
         for (int i = 0; i < precedenceItems.size(); i++) {
             PrecedenceItem precedenceItem = precedenceItems.get(i);
-            if (!(precedenceItem.getItem() instanceof OperatorItem)) continue;
+            if (!(precedenceItem.getItem() instanceof OperatorSign)) continue;
 
             if (precedenceItem.hasPrecedence()) {
                 applyPrecedence(i-1);
@@ -49,7 +49,7 @@ public class ExpressionPrecedencer {
 
     private void applyPrecedence(int i) {
         PrecedenceItem precedenceItem = precedenceItems.get(i);
-        if (precedenceItem.getItem() instanceof ValueItem) {
+        if (precedenceItem.getItem() instanceof ValueSign) {
             precedenceItem.setPrecedence(true);
         } else {
             new Exception("invalid operator-value order").printStackTrace();
@@ -63,19 +63,19 @@ public class ExpressionPrecedencer {
         return true;
     }
 
-    private List<Item> generateNewItems() {
-        List<Item> items = new ArrayList<>();
+    private List<Sign> generateNewItems() {
+        List<Sign> signs = new ArrayList<>();
 
         boolean insidePrecedence = false;
-        List<Item> buffer = new ArrayList<>();
+        List<Sign> buffer = new ArrayList<>();
         for (PrecedenceItem item : precedenceItems) {
             if (insidePrecedence) {
                 if (item.hasPrecedence()) {
                     buffer.add(item.getItem());
                 } else {
-                    items.add(new ValueItem(new Expression(buffer)));
+                    signs.add(new ValueSign(new Expression(buffer)));
                     buffer = new ArrayList<>();
-                    items.add(item.getItem());
+                    signs.add(item.getItem());
                     insidePrecedence = false;
                 }
             } else {
@@ -83,14 +83,14 @@ public class ExpressionPrecedencer {
                     buffer.add(item.getItem());
                     insidePrecedence = true;
                 } else {
-                    items.add(item.getItem());
+                    signs.add(item.getItem());
                 }
             }
         }
         if (buffer.size() > 0) {
-            items.add(new ValueItem(new Expression(buffer)));
+            signs.add(new ValueSign(new Expression(buffer)));
         }
 
-        return items;
+        return signs;
     }
 }

@@ -1,8 +1,8 @@
 package jupiterpi.pilang.values.parsing.precedence;
 
-import jupiterpi.pilang.values.parsing.Item;
-import jupiterpi.pilang.values.parsing.OperatorItem;
-import jupiterpi.pilang.values.parsing.ValueItem;
+import jupiterpi.pilang.values.parsing.signs.Sign;
+import jupiterpi.pilang.values.parsing.signs.OperatorSign;
+import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,15 +10,15 @@ import java.util.List;
 public class PrecedenceItem {
     private final List<String> precedenceOperators = Arrays.asList("*", "/");
 
-    private Item item;
+    private Sign sign;
     private boolean precedence;
 
-    public PrecedenceItem(Item item) {
-        this.item = item;
-        if (item instanceof ValueItem) {
+    public PrecedenceItem(Sign sign) {
+        this.sign = sign;
+        if (sign instanceof ValueSign) {
             this.precedence = false;
         } else {
-            OperatorItem operatorItem = (OperatorItem) item;
+            OperatorSign operatorItem = (OperatorSign) sign;
             this.precedence = listContains(precedenceOperators, operatorItem.getOperator());
         }
     }
@@ -29,8 +29,8 @@ public class PrecedenceItem {
         return false;
     }
 
-    public Item getItem() {
-        return item;
+    public Sign getItem() {
+        return sign;
     }
 
     public boolean hasPrecedence() {

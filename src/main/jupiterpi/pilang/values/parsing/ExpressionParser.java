@@ -10,19 +10,22 @@ import jupiterpi.pilang.values.functions.FunctionCallWrapper;
 import jupiterpi.pilang.values.functions.FunctionLiteral;
 import jupiterpi.pilang.values.other.Literal;
 import jupiterpi.pilang.values.other.VariableReference;
+import jupiterpi.pilang.values.parsing.signs.OperatorSign;
+import jupiterpi.pilang.values.parsing.signs.Sign;
+import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionParser {
-    private List<Item> items = new ArrayList<>();
+    private List<Sign> signs = new ArrayList<>();
 
     public ExpressionParser(TokenSequence tokens) {
         parseTokens(tokens);
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<Sign> getItems() {
+        return signs;
     }
 
     /* parser */
@@ -46,16 +49,16 @@ public class ExpressionParser {
                     continue;
                 }
 
-                Item lastItem = items.size() == 0 ? null : items.get(items.size() - 1);
+                Sign lastSign = signs.size() == 0 ? null : signs.get(signs.size() - 1);
                 switch (t.getType()) {
                     case EXPRESSION:
-                        if (lastItem == null) {
+                        if (lastSign == null) {
                             appendValue(new Expression(t.getContent()));
                             break;
                         }
 
-                        if (lastItem instanceof ValueItem) {
-                            Value original = ((ValueItem) lastItem).getValue();
+                        if (lastSign instanceof ValueSign) {
+                            Value original = ((ValueSign) lastSign).getValue();
 
                             List<Value> parameters = new ArrayList<>();
                             TokenSequence parametersTokens = new Lexer(t.getContent()).getTokens();
@@ -64,21 +67,21 @@ public class ExpressionParser {
                             }
 
                             Value callWrapper = new FunctionCallWrapper(original, parameters);
-                            items.set(items.size() - 1, new ValueItem(callWrapper));
+                            signs.set(signs.size() - 1, new ValueSign(callWrapper));
                         } else {
                             appendValue(new Expression(t.getContent()));
                         }
                         break;
                     case BRACKET_EXPRESSION:
-                        if (lastItem == null) {
+                        if (lastSign == null) {
                             appendValue(new ArrayLiteral(t.getContent()));
                             break;
                         }
 
-                        if (lastItem instanceof ValueItem) {
-                            Value original = ((ValueItem) lastItem).getValue();
+                        if (lastSign instanceof ValueSign) {
+                            Value original = ((ValueSign) lastSign).getValue();
                             Value callWrapper = new ArrayCallWrapper(original, new Expression(t.getContent()));
-                            items.set(items.size() - 1, new ValueItem(callWrapper));
+                            signs.set(signs.size() - 1, new ValueSign(callWrapper));
                         } else {
                             appendValue(new ArrayLiteral(t.getContent()));
                         }
@@ -100,10 +103,10 @@ public class ExpressionParser {
     }
 
     private void appendValue(Value value) {
-        items.add(new ValueItem(value));
+        signs.add(new ValueSign(value));
     }
 
     private void appendOperator(String operator) {
-        items.add(new OperatorItem(operator));
+        signs.add(new OperatorSign(operator));
     }
 }

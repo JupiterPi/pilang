@@ -8,6 +8,9 @@ import jupiterpi.pilang.values.other.Literal;
 import jupiterpi.pilang.values.other.Operation;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
+import jupiterpi.pilang.values.parsing.signs.OperatorSign;
+import jupiterpi.pilang.values.parsing.signs.Sign;
+import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 import java.util.List;
 
@@ -24,8 +27,8 @@ public class Expression extends Value {
         createFromTokenSequence(tokens);
     }
 
-    public Expression(List<Item> items) {
-        createFromItems(items);
+    public Expression(List<Sign> signs) {
+        createFromItems(signs);
     }
 
     // constructor methods
@@ -38,16 +41,16 @@ public class Expression extends Value {
 
     private void createFromTokenSequence(TokenSequence tokens) {
         ExpressionParser parser = new ExpressionParser(tokens);
-        List<Item> items = parser.getItems();
+        List<Sign> signs = parser.getItems();
 
-        ExpressionPrecedencer precedencer = new ExpressionPrecedencer(items);
-        items = precedencer.getItems();
+        ExpressionPrecedencer precedencer = new ExpressionPrecedencer(signs);
+        signs = precedencer.getItems();
 
-        createFromItems(items);
+        createFromItems(signs);
     }
 
-    private void createFromItems(List<Item> items) {
-        value = parseItems(items);
+    private void createFromItems(List<Sign> signs) {
+        value = parseItems(signs);
     }
 
     // Value getters
@@ -69,10 +72,10 @@ public class Expression extends Value {
     private String operator = null;
     private Value b = null;
 
-    private Value parseItems(List<Item> items) {
-        for (Item item : items) {
-            if (item instanceof ValueItem) {
-                Value value = ((ValueItem) item).getValue();
+    private Value parseItems(List<Sign> signs) {
+        for (Sign sign : signs) {
+            if (sign instanceof ValueSign) {
+                Value value = ((ValueSign) sign).getValue();
                 if (a == null) {
                     a = value;
                 } else {
@@ -83,16 +86,16 @@ public class Expression extends Value {
                     }
                 }
             } else {
-                if (item instanceof OperatorItem) {
+                if (sign instanceof OperatorSign) {
                     if (operator == null) {
-                        operator = ((OperatorItem) item).getOperator();
+                        operator = ((OperatorSign) sign).getOperator();
                         if (a == null && (operator.equals("+") || operator.equals("-"))) {
                             a = new Literal("0");
                         }
                     } else {
-                        new Exception("no space for operator: " + ((OperatorItem) item).getOperator()).printStackTrace();
+                        new Exception("no space for operator: " + ((OperatorSign) sign).getOperator()).printStackTrace();
                     }
-                } else new Exception("unknown Item type").printStackTrace();
+                } else new Exception("unknown Sign type").printStackTrace();
             }
 
             if (a != null && operator != null && b != null) {
