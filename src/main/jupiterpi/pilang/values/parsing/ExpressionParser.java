@@ -1,8 +1,8 @@
 package jupiterpi.pilang.values.parsing;
 
 import jupiterpi.pilang.script.parser.Lexer;
-import jupiterpi.pilang.script.parser.Token;
-import jupiterpi.pilang.script.parser.TokenSequence;
+import jupiterpi.pilang.script.parser.tokens.Token;
+import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import jupiterpi.pilang.values.*;
 import jupiterpi.pilang.values.arrays.ArrayCallWrapper;
 import jupiterpi.pilang.values.arrays.ArrayLiteral;

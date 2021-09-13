@@ -1,7 +1,7 @@
 package jupiterpi.pilang.values.parsing;
 
 import jupiterpi.pilang.script.parser.Lexer;
-import jupiterpi.pilang.script.parser.TokenSequence;
+import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.other.Literal;

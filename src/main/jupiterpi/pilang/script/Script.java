@@ -3,6 +3,8 @@ package jupiterpi.pilang.script;
 import jupiterpi.pilang.Main;
 import jupiterpi.pilang.script.instructions.Instruction;
 import jupiterpi.pilang.script.parser.*;
+import jupiterpi.pilang.script.parser.tokens.Token;
+import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import jupiterpi.pilang.script.runtime.ReferenceRegistry;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.script.runtime.Variable;

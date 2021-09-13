@@ -1,4 +1,4 @@
-package jupiterpi.pilang.script.parser;
+package jupiterpi.pilang.script.parser.tokens;
 
 import jupiterpi.tools.util.AppendingList;
 

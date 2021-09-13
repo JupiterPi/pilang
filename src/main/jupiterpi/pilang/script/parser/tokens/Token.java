@@ -1,6 +1,6 @@
-package jupiterpi.pilang.script.parser;
+package jupiterpi.pilang.script.parser.tokens;
 
-import static jupiterpi.pilang.script.parser.Token.Type.*;
+import static jupiterpi.pilang.script.parser.tokens.Token.Type.*;
 
 public class Token {
     public enum Type {

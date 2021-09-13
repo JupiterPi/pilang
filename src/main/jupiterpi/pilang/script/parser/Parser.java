@@ -4,6 +4,8 @@ import jupiterpi.pilang.script.instructions.*;
 import jupiterpi.pilang.script.instructions.structures.ForInstruction;
 import jupiterpi.pilang.script.instructions.structures.IfInstruction;
 import jupiterpi.pilang.script.instructions.structures.WhileInstruction;
+import jupiterpi.pilang.script.parser.tokens.Token;
+import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.parsing.Expression;

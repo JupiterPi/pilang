@@ -1,7 +1,7 @@
 package jupiterpi.pilang.values;
 
-import jupiterpi.pilang.script.parser.Token;
-import jupiterpi.pilang.script.parser.TokenSequence;
+import jupiterpi.pilang.script.parser.tokens.Token;
+import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 
 import java.util.ArrayList;
 import java.util.List;

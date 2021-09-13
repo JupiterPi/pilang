@@ -1,6 +1,6 @@
 package jupiterpi.pilang.values.functions;
 
-import jupiterpi.pilang.script.parser.TokenSequence;
+import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import jupiterpi.pilang.values.DataType;
 
 public class VariableHead {

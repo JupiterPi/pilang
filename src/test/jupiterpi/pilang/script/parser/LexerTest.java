@@ -1,5 +1,6 @@
 package jupiterpi.pilang.script.parser;
 
+import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
