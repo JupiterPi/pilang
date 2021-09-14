@@ -1,0 +1,13 @@
+notice debug;
+
+int a1 = 2 + 5;
+float a2 = 3.0 + 0.9;
+int a3 = 9 + 9.0;
+
+bool b1 = 3 == 3;
+bool b2 = 3.0 == 3;
+bool b3 = 1.0 != 1;
+
+bool b4 = 4.0 < 6;
+bool b5 = 4 < 10;
+bool b6 = 10 <= 10;

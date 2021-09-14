@@ -9,19 +9,14 @@ import jupiterpi.pilang.values.Value;
 public class NumericComparisonOperator extends Operator {
     public static final StringSet numericComparisonOperators = new StringSet("<", ">", "<=", ">=");
 
-    private String operator;
-
     public NumericComparisonOperator(String operator) {
-        super(PrecedenceLevel.BUNDLE);
-        if (numericComparisonOperators.contains(operator)) {
-            this.operator = operator;
-        } else new Exception("invalid operator: " + operator).printStackTrace();
+        super(operator, numericComparisonOperators, PrecedenceLevel.BUNDLE);
     }
 
     @Override
     public Value apply(Value a, Value b, Scope scope) {
         DataType type = a.getType(scope);
-        if (!type.equals(b.getType(scope))) new Exception("values in " + operator + " operation have to be of equal type!").printStackTrace();
+        if (!type.equals(b.getType(scope))) new Exception("values in " + operator + " operation have to be of equal type (currently " + a.getType(scope) + " and " + b.getType(scope) + ")!").printStackTrace();
         if (type.equals(new DataType(DataType.BaseType.INT)) || type.equals(new DataType(DataType.BaseType.FLOAT))) {
             float av = Float.parseFloat(a.get(scope));
             float bv = Float.parseFloat(b.get(scope));
@@ -35,8 +30,13 @@ public class NumericComparisonOperator extends Operator {
             }
             return FinalValue.fromBool(result);
         } else {
-            new Exception("values in " + operator + " operation have to be of int or float type!").printStackTrace();
+            new Exception("values in " + operator + " operation have to be of int or float type (currently " + a.getType(scope) + " and " + b.getType(scope) + ")!").printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public DataType getType(Value a, Value b, Scope scope) {
+        return new DataType(DataType.BaseType.BOOL);
     }
 }

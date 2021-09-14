@@ -9,13 +9,8 @@ import jupiterpi.pilang.values.Value;
 public class LogicalOperators extends Operator {
     public static final StringSet logicalOperators = new StringSet("&&", "||");
 
-    private String operator;
-
     public LogicalOperators(String operator) {
-        super(PrecedenceLevel.BUNDLE_LARGER);
-        if (logicalOperators.contains(operator)) {
-            this.operator = operator;
-        } else new Exception("invalid operator: " + operator).printStackTrace();
+        super(operator, logicalOperators, PrecedenceLevel.BUNDLE_LARGER);
     }
 
     @Override
@@ -31,8 +26,13 @@ public class LogicalOperators extends Operator {
             }
             return FinalValue.fromBool(result);
         } else {
-            new Exception("values in " + operator + " operation have to be of bool type!").printStackTrace();
+            new Exception("values in " + operator + " operation have to be of bool type (currently" + a.getType(scope) + " and " + b.getType(scope) + ")!").printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public DataType getType(Value a, Value b, Scope scope) {
+        return new DataType(DataType.BaseType.BOOL);
     }
 }

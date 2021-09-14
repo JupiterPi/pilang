@@ -9,18 +9,23 @@ import jupiterpi.pilang.values.Value;
 public class ComparisonOperator extends Operator {
     public static final StringSet comparisonOperators = new StringSet("==", "!=");
 
-    private boolean inverted = false;
-
     public ComparisonOperator(String operator) {
-        super(PrecedenceLevel.BUNDLE);
-        if (comparisonOperators.contains(operator)) {
-            inverted = operator.equals("!=");
-        } else new Exception("invalid operator: " + operator).printStackTrace();
+        super(operator, comparisonOperators, PrecedenceLevel.BUNDLE);
     }
 
     @Override
     public Value apply(Value a, Value b, Scope scope) {
-        if (!a.getType(scope).equals(b.getType(scope))) return FinalValue.fromBool(false);
-        return FinalValue.fromBool(a.get(scope).equals(b.get(scope)));
+        boolean result = calculate(a, b, scope);
+        if (operator.equals("!=")) result = !result;
+        return FinalValue.fromBool(result);
+    }
+    private boolean calculate(Value a, Value b, Scope scope) {
+        if (!a.getType(scope).equals(b.getType(scope))) return false;
+        return a.get(scope).equals(b.get(scope));
+    }
+
+    @Override
+    public DataType getType(Value a, Value b, Scope scope) {
+        return new DataType(DataType.BaseType.BOOL);
     }
 }
