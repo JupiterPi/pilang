@@ -6,7 +6,7 @@ import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.other.Literal;
-import jupiterpi.pilang.values.other.Operation;
+import jupiterpi.pilang.values.operations.Operation;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
 import jupiterpi.pilang.values.parsing.signs.OperatorSign;
 import jupiterpi.pilang.values.parsing.signs.Sign;

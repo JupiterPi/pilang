@@ -1,5 +1,6 @@
 package jupiterpi.pilang.values.parsing.precedence;
 
+import jupiterpi.pilang.util.StringSet;
 import jupiterpi.pilang.values.parsing.signs.Sign;
 import jupiterpi.pilang.values.parsing.signs.OperatorSign;
 import jupiterpi.pilang.values.parsing.signs.ValueSign;
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PrecedenceSign {
-    private final List<String> precedenceOperators = Arrays.asList("*", "/");
+    private final StringSet precedenceOperators = new StringSet("*", "/");
 
     private Sign sign;
     private boolean precedence;

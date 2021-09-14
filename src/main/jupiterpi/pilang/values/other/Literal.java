@@ -1,5 +1,6 @@
 package jupiterpi.pilang.values.other;
 
+import jupiterpi.pilang.util.StringSet;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.FinalValue;
 
@@ -7,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Literal extends FinalValue {
-    private final List<String> numbers = Arrays.asList("0123456789".split(""));
+    private final StringSet numbers = StringSet.getCharacters("0123456789");
 
     public Literal(String value) {
         if (value.startsWith("'")) {

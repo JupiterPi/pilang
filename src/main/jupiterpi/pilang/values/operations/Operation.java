@@ -1,6 +1,7 @@
-package jupiterpi.pilang.values.other;
+package jupiterpi.pilang.values.operations;
 
 import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.util.StringSet;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 
@@ -8,9 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Operation extends Value {
-    private List<String> comparisonOperators = Arrays.asList("==", "!=", "<", ">", "<=", ">=");
-    private List<String> equalOperators = Arrays.asList("==", "!=");
-    private List<String> numericComparisonOperators = Arrays.asList("<", ">", "<=", ">=");
+    private StringSet comparisonOperators = new StringSet("==", "!=", "<", ">", "<=", ">=");
+    private StringSet equalOperators = new StringSet("==", "!=");
+    private StringSet numericComparisonOperators = new StringSet("<", ">", "<=", ">=");
 
     private String operator;
     private Value a;

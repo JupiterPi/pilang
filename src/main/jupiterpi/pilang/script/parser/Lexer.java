@@ -3,6 +3,7 @@ package jupiterpi.pilang.script.parser;
 import jupiterpi.pilang.script.parser.tokens.Token;
 import jupiterpi.pilang.script.parser.tokens.Token.Type;
 import jupiterpi.pilang.script.parser.tokens.TokenSequence;
+import jupiterpi.pilang.util.StringSet;
 import jupiterpi.pilang.values.DataType;
 
 import java.util.ArrayList;
@@ -22,21 +23,15 @@ public class Lexer {
         return tokens;
     }
 
-    /*public static void main(String[] args) {
-        Lexer lexer = new Lexer("5+3+ 1.0 +true");
-        TokenSequence tokens = lexer.getTokens();
-        System.out.println(tokens);
-    }*/
-
     /* lexer */
 
     // character types
-    private final List<String> operators = Arrays.asList("+-*/&|=<>!".split(""));
-    private final List<String> sequence = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789".split(""));
-    private final List<String> sequenceNumberStart = Arrays.asList("0123456789".split(""));
-    private final List<String> sequenceTextStart = Arrays.asList("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(""));
-    private final List<String> whitespaces = Arrays.asList(" \t\n\r".split(""));
-    private final List<String> brackets = Arrays.asList("()[]{}".split(""));
+    private final StringSet operators = StringSet.getCharacters("+-*/&|=<>!");
+    private final StringSet sequence = StringSet.getCharacters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789");
+    private final StringSet sequenceNumberStart = StringSet.getCharacters("0123456789");
+    private final StringSet sequenceTextStart = StringSet.getCharacters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_");
+    private final StringSet whitespaces = StringSet.getCharacters(" \t\n\r");
+    private final StringSet brackets = StringSet.getCharacters("()[]{}");
 
     // buffer
     private String buffer = null;
@@ -171,8 +166,8 @@ public class Lexer {
         return -1;
     }
 
-    private final List<String> assignOperators = Arrays.asList("=", "+=", "-=", "*=", "/=");
-    private final List<String> incrementOperators = Arrays.asList("++", "--");
+    private final StringSet assignOperators = new StringSet("=", "+=", "-=", "*=", "/=");
+    private final StringSet incrementOperators = new StringSet("++", "--");
 
     private void flushBuffer() {
         if (buffer == null) return;

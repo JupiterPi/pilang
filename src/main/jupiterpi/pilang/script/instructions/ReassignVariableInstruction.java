@@ -8,7 +8,7 @@ import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.FinalValue;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.arrays.ArrayValue;
-import jupiterpi.pilang.values.other.Operation;
+import jupiterpi.pilang.values.operations.Operation;
 import jupiterpi.pilang.values.parsing.Expression;
 import jupiterpi.tools.util.AppendingList;
 
