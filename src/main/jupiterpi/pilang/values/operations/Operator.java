@@ -5,10 +5,6 @@ import jupiterpi.pilang.values.Value;
 public abstract class Operator {
     protected PrecedenceLevel precedenceLevel;
 
-    protected Operator() {
-        this.precedenceLevel = null;
-    }
-
     public Operator(PrecedenceLevel precedenceLevel) {
         this.precedenceLevel = precedenceLevel;
     }
