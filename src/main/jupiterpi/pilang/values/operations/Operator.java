@@ -4,12 +4,13 @@ import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.util.StringSet;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
+import jupiterpi.pilang.values.parsing.signs.Sign;
 
-public abstract class Operator {
-    protected PrecedenceLevel precedenceLevel;
+public abstract class Operator implements Sign {
+    protected int precedenceLevel;
     protected String operator;
 
-    protected Operator(String operator, StringSet allowedOperators, PrecedenceLevel precedenceLevel) {
+    protected Operator(String operator, StringSet allowedOperators, int precedenceLevel) {
         if (allowedOperators.contains(operator)) {
             this.operator = operator;
         } else new Exception("invalid operator: " + operator).printStackTrace();
@@ -20,13 +21,13 @@ public abstract class Operator {
         if (NumericOperator.numericOperators.contains(operator)) return new NumericOperator(operator);
         if (ComparisonOperator.comparisonOperators.contains(operator)) return new ComparisonOperator(operator);
         if (NumericComparisonOperator.numericComparisonOperators.contains(operator)) return new NumericComparisonOperator(operator);
-        if (LogicalOperators.logicalOperators.contains(operator)) return new LogicalOperators(operator);
+        if (LogicalOperator.logicalOperators.contains(operator)) return new LogicalOperator(operator);
 
         new Exception("invalid operator: " + operator).printStackTrace();
         return null;
     }
 
-    public PrecedenceLevel getPrecedenceLevel() {
+    public int getPrecedenceLevel() {
         return precedenceLevel;
     }
     public String getOperator() {
@@ -39,9 +40,5 @@ public abstract class Operator {
     @Override
     public String toString() {
         return operator;
-    }
-
-    public enum PrecedenceLevel {
-        NONE, SINGLE, BUNDLE, BUNDLE_LARGER
     }
 }

@@ -5,13 +5,12 @@ import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
+import jupiterpi.pilang.values.operations.Operator;
 import jupiterpi.pilang.values.other.Literal;
 import jupiterpi.pilang.values.operations.Operation;
 import jupiterpi.pilang.values.parsing.precedence.ExpressionPrecedencer;
-import jupiterpi.pilang.values.parsing.signs.OperatorSign;
 import jupiterpi.pilang.values.parsing.signs.Sign;
 import jupiterpi.pilang.values.parsing.signs.SignSequence;
-import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 public class Expression extends Value {
     private Value value;
@@ -68,13 +67,13 @@ public class Expression extends Value {
 
     // values buffer
     private Value a = null;
-    private String operator = null;
+    private Operator operator = null;
     private Value b = null;
 
     private Value parseSigns(SignSequence signs) {
         for (Sign sign : signs) {
-            if (sign instanceof ValueSign) {
-                Value value = ((ValueSign) sign).getValue();
+            if (sign instanceof Value) {
+                Value value = (Value) sign;
                 if (a == null) {
                     a = value;
                 } else {
@@ -85,14 +84,14 @@ public class Expression extends Value {
                     }
                 }
             } else {
-                if (sign instanceof OperatorSign) {
+                if (sign instanceof Operator) {
                     if (operator == null) {
-                        operator = ((OperatorSign) sign).getOperator();
-                        if (a == null && (operator.equals("+") || operator.equals("-"))) {
+                        operator = (Operator) sign;
+                        if (a == null && (operator.getOperator().equals("+") || operator.getOperator().equals("-"))) {
                             a = new Literal("0");
                         }
                     } else {
-                        new Exception("no space for operator: " + ((OperatorSign) sign).getOperator()).printStackTrace();
+                        new Exception("no space for operator: " + ((Operator)sign).getOperator()).printStackTrace();
                     }
                 } else new Exception("unknown Sign type").printStackTrace();
             }

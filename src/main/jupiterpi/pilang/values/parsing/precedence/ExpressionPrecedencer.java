@@ -1,10 +1,9 @@
 package jupiterpi.pilang.values.parsing.precedence;
 
+import jupiterpi.pilang.values.operations.Operator;
 import jupiterpi.pilang.values.parsing.Expression;
 import jupiterpi.pilang.values.parsing.signs.Sign;
-import jupiterpi.pilang.values.parsing.signs.OperatorSign;
 import jupiterpi.pilang.values.parsing.signs.SignSequence;
-import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +12,7 @@ public class ExpressionPrecedencer {
     private SignSequence signs;
 
     public ExpressionPrecedencer(SignSequence signs) {
-        generateSignsList(signs);
-        determinePrecedence();
-        if (isOnlyPrecedence()) {
-            this.signs = signs;
-        } else {
-            this.signs = generateNewSigns();
-        }
+        this.signs = applyPrecedence(signs);
     }
 
     public SignSequence getSigns() {
@@ -28,68 +21,80 @@ public class ExpressionPrecedencer {
 
     /* precedencer */
 
-    private List<PrecedenceSign> precedenceSigns = new ArrayList<>();
+    private SignSequence applyPrecedence(SignSequence signs) {
+        List<PrecedenceSign> precedenceSigns = new ArrayList<>();
 
-    private void generateSignsList(SignSequence signs) {
+        // generate signs list, check operator-value order
+        boolean lastIsOperator = !(signs.get(0) instanceof Operator);
         for (Sign sign : signs) {
+            boolean isOperator = (sign instanceof Operator);
+            if (lastIsOperator == isOperator) new Exception("invalid operator-value order").printStackTrace();
             precedenceSigns.add(new PrecedenceSign(sign));
+            lastIsOperator = isOperator;
         }
-    }
 
-    private void determinePrecedence() {
+        // determine precedence
         for (int i = 0; i < precedenceSigns.size(); i++) {
             PrecedenceSign precedenceSign = precedenceSigns.get(i);
-            if (!(precedenceSign.getSign() instanceof OperatorSign)) continue;
+            if (!(precedenceSign.getSign() instanceof Operator)) continue;
 
-            if (precedenceSign.hasPrecedence()) {
-                applyPrecedence(i-1);
-                applyPrecedence(i+1);
+            int precedenceLevel = precedenceSign.getPrecedenceLevel();
+            for (int offset : new int[]{-1, +1}) {
+                PrecedenceSign affectedPrecedenceSign = precedenceSigns.get(i + offset);
+                if (precedenceLevel > affectedPrecedenceSign.getPrecedenceLevel()) affectedPrecedenceSign.setPrecedenceLevel(precedenceLevel);
             }
         }
-    }
 
-    private void applyPrecedence(int i) {
-        PrecedenceSign precedenceSign = precedenceSigns.get(i);
-        if (precedenceSign.getSign() instanceof ValueSign) {
-            precedenceSign.setPrecedence(true);
-        } else {
-            new Exception("invalid operator-value order").printStackTrace();
+        // extract base precedence
+        int basePrecedenceLevel = Integer.MAX_VALUE;
+        int changesInBasePrecedenceLevel = 0;
+        for (PrecedenceSign precedenceSign : precedenceSigns) {
+            int precedenceLevel = precedenceSign.getPrecedenceLevel();
+            if (precedenceLevel < basePrecedenceLevel) {
+                changesInBasePrecedenceLevel++;
+                basePrecedenceLevel = precedenceLevel;
+            }
         }
-    }
 
-    private boolean isOnlyPrecedence() {
-        for (PrecedenceSign sign : precedenceSigns) {
-            if (!sign.hasPrecedence()) return false;
-        }
-        return true;
-    }
-
-    private SignSequence generateNewSigns() {
-        SignSequence signs = new SignSequence();
-
-        boolean insidePrecedence = false;
-        SignSequence buffer = new SignSequence();
-        for (PrecedenceSign sign : precedenceSigns) {
-            if (insidePrecedence) {
-                if (sign.hasPrecedence()) {
-                    buffer.add(sign.getSign());
-                } else {
-                    signs.add(new ValueSign(new Expression(buffer)));
-                    buffer = new SignSequence();
-                    signs.add(sign.getSign());
-                    insidePrecedence = false;
-                }
+        // single precedence
+        boolean isSinglePrecedence = true;
+        int firstPrecedenceLevel = -1;
+        for (PrecedenceSign precedenceSign : precedenceSigns) {
+            int currentPrecedenceLevel = precedenceSign.getPrecedenceLevel();
+            if (firstPrecedenceLevel == -1) {
+                firstPrecedenceLevel = currentPrecedenceLevel;
             } else {
-                if (sign.hasPrecedence()) {
-                    buffer.add(sign.getSign());
-                    insidePrecedence = true;
-                } else {
-                    signs.add(sign.getSign());
+                if (currentPrecedenceLevel != firstPrecedenceLevel) {
+                    isSinglePrecedence = false;
+                    break;
                 }
             }
         }
-        if (buffer.size() > 0) {
-            signs.add(new ValueSign(new Expression(buffer)));
+        if (isSinglePrecedence) return signs;
+
+        // generate new signs
+        signs = new SignSequence();
+        boolean currentlyPrecedence = false;
+        SignSequence buffer = new SignSequence();
+        for (PrecedenceSign precedenceSign : precedenceSigns) {
+            int currentPrecedenceLevel = precedenceSign.getPrecedenceLevel();
+            boolean precedence = currentPrecedenceLevel > basePrecedenceLevel;
+            if (precedence) {
+                if (!currentlyPrecedence) {
+                    currentlyPrecedence = true;
+                }
+                buffer.add(precedenceSign.getSign());
+            } else {
+                if (currentlyPrecedence) {
+                    signs.add(new Expression(buffer));
+                    currentlyPrecedence = false;
+                    buffer = new SignSequence();
+                }
+                signs.add(precedenceSign.getSign());
+            }
+        }
+        if (currentlyPrecedence) {
+            signs.add(new Expression(buffer));
         }
 
         return signs;

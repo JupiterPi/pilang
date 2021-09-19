@@ -6,11 +6,12 @@ import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 import jupiterpi.pilang.script.runtime.Function;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.arrays.ArrayValue;
+import jupiterpi.pilang.values.parsing.signs.Sign;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Value {
+public abstract class Value implements Sign {
     public abstract DataType getType(Scope scope);
     public abstract String get(Scope scope);
 

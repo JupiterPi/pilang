@@ -13,10 +13,10 @@ public class Operation extends Value {
     private Value a;
     private Value b;
 
-    public Operation(Value a, String operator, Value b) {
+    public Operation(Value a, Operator operator, Value b) {
+        this.operator = operator;
         this.a = a;
         this.b = b;
-        this.operator = Operator.makeOperator(operator);
     }
 
     @Override

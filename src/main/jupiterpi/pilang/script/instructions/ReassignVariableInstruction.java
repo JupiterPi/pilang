@@ -9,6 +9,7 @@ import jupiterpi.pilang.values.FinalValue;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.pilang.values.arrays.ArrayValue;
 import jupiterpi.pilang.values.operations.Operation;
+import jupiterpi.pilang.values.operations.Operator;
 import jupiterpi.pilang.values.parsing.Expression;
 import jupiterpi.tools.util.AppendingList;
 
@@ -37,12 +38,12 @@ public class ReassignVariableInstruction extends Instruction {
         // =, +=, -=, *=, /=, ++, --
         switch (operator) {
             case "=": targetValue = value; break;
-            case "+=": targetValue = new Operation(new Expression(reference), "+", value); break;
-            case "-=": targetValue = new Operation(new Expression(reference), "-", value); break;
-            case "*=": targetValue = new Operation(new Expression(reference), "*", value); break;
-            case "/=": targetValue = new Operation(new Expression(reference), "/", value); break;
-            case "++": targetValue = new Operation(new Expression(reference), "+", FinalValue.fromInt(1)); break;
-            case "--": targetValue = new Operation(new Expression(reference), "-", FinalValue.fromInt(1)); break;
+            case "+=": targetValue = new Operation(new Expression(reference), Operator.makeOperator("+"), value); break;
+            case "-=": targetValue = new Operation(new Expression(reference), Operator.makeOperator("-"), value); break;
+            case "*=": targetValue = new Operation(new Expression(reference), Operator.makeOperator("*"), value); break;
+            case "/=": targetValue = new Operation(new Expression(reference), Operator.makeOperator("/"), value); break;
+            case "++": targetValue = new Operation(new Expression(reference), Operator.makeOperator("+"), FinalValue.fromInt(1)); break;
+            case "--": targetValue = new Operation(new Expression(reference), Operator.makeOperator("-"), FinalValue.fromInt(1)); break;
             default:
                 new Exception("invalid operator: " + operator).printStackTrace();
                 targetValue = value;

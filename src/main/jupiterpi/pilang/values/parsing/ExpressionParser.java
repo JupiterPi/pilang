@@ -8,12 +8,11 @@ import jupiterpi.pilang.values.arrays.ArrayCallWrapper;
 import jupiterpi.pilang.values.arrays.ArrayLiteral;
 import jupiterpi.pilang.values.functions.FunctionCallWrapper;
 import jupiterpi.pilang.values.functions.FunctionLiteral;
+import jupiterpi.pilang.values.operations.Operator;
 import jupiterpi.pilang.values.other.Literal;
 import jupiterpi.pilang.values.other.VariableReference;
-import jupiterpi.pilang.values.parsing.signs.OperatorSign;
 import jupiterpi.pilang.values.parsing.signs.Sign;
 import jupiterpi.pilang.values.parsing.signs.SignSequence;
-import jupiterpi.pilang.values.parsing.signs.ValueSign;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +57,8 @@ public class ExpressionParser {
                             break;
                         }
 
-                        if (lastSign instanceof ValueSign) {
-                            Value original = ((ValueSign) lastSign).getValue();
+                        if (lastSign instanceof Value) {
+                            Value original = (Value) lastSign;
 
                             List<Value> parameters = new ArrayList<>();
                             TokenSequence parametersTokens = new Lexer(t.getContent()).getTokens();
@@ -68,7 +67,7 @@ public class ExpressionParser {
                             }
 
                             Value callWrapper = new FunctionCallWrapper(original, parameters);
-                            signs.set(signs.size() - 1, new ValueSign(callWrapper));
+                            signs.set(signs.size() - 1, callWrapper);
                         } else {
                             appendValue(new Expression(t.getContent()));
                         }
@@ -79,10 +78,10 @@ public class ExpressionParser {
                             break;
                         }
 
-                        if (lastSign instanceof ValueSign) {
-                            Value original = ((ValueSign) lastSign).getValue();
+                        if (lastSign instanceof Value) {
+                            Value original = (Value) lastSign;
                             Value callWrapper = new ArrayCallWrapper(original, new Expression(t.getContent()));
-                            signs.set(signs.size() - 1, new ValueSign(callWrapper));
+                            signs.set(signs.size() - 1, callWrapper);
                         } else {
                             appendValue(new ArrayLiteral(t.getContent()));
                         }
@@ -104,10 +103,10 @@ public class ExpressionParser {
     }
 
     private void appendValue(Value value) {
-        signs.add(new ValueSign(value));
+        signs.add(value);
     }
 
     private void appendOperator(String operator) {
-        signs.add(new OperatorSign(operator));
+        signs.add(Operator.makeOperator(operator));
     }
 }

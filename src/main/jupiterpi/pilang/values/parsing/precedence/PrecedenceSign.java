@@ -1,44 +1,37 @@
 package jupiterpi.pilang.values.parsing.precedence;
 
-import jupiterpi.pilang.util.StringSet;
+import jupiterpi.pilang.values.Value;
+import jupiterpi.pilang.values.operations.Operator;
 import jupiterpi.pilang.values.parsing.signs.Sign;
-import jupiterpi.pilang.values.parsing.signs.OperatorSign;
-import jupiterpi.pilang.values.parsing.signs.ValueSign;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class PrecedenceSign {
-    private final StringSet precedenceOperators = new StringSet("*", "/");
-
     private Sign sign;
-    private boolean precedence;
+    private int precedenceLevel;
 
     public PrecedenceSign(Sign sign) {
         this.sign = sign;
-        if (sign instanceof ValueSign) {
-            this.precedence = false;
+        if (sign instanceof Value) {
+            this.precedenceLevel = PrecedenceLevel.NONE;
         } else {
-            OperatorSign operatorItem = (OperatorSign) sign;
-            this.precedence = listContains(precedenceOperators, operatorItem.getOperator());
+            Operator operatorSign = (Operator) sign;
+            this.precedenceLevel = operatorSign.getPrecedenceLevel();
         }
-    }
-    private boolean listContains(List<String> list, String c) {
-        for (String lc : list) {
-            if (lc.equals(c)) return true;
-        }
-        return false;
     }
 
     public Sign getSign() {
         return sign;
     }
 
-    public boolean hasPrecedence() {
-        return precedence;
+    public int getPrecedenceLevel() {
+        return precedenceLevel;
     }
 
-    public void setPrecedence(boolean precedence) {
-        this.precedence = precedence;
+    public void setPrecedenceLevel(int precedenceLevel) {
+        this.precedenceLevel = precedenceLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "{" + precedenceLevel + "} " + sign;
     }
 }

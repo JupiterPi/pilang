@@ -5,11 +5,12 @@ import jupiterpi.pilang.util.StringSet;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.FinalValue;
 import jupiterpi.pilang.values.Value;
+import jupiterpi.pilang.values.parsing.precedence.PrecedenceLevel;
 
-public class LogicalOperators extends Operator {
+public class LogicalOperator extends Operator {
     public static final StringSet logicalOperators = new StringSet("&&", "||");
 
-    public LogicalOperators(String operator) {
+    public LogicalOperator(String operator) {
         super(operator, logicalOperators, PrecedenceLevel.BUNDLE_LARGER);
     }
 

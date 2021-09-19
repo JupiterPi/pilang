@@ -5,6 +5,7 @@ import jupiterpi.pilang.util.StringSet;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.FinalValue;
 import jupiterpi.pilang.values.Value;
+import jupiterpi.pilang.values.parsing.precedence.PrecedenceLevel;
 
 public class NumericOperator extends Operator {
     public static final StringSet numericOperators = new StringSet("+", "-", "*", "/");
@@ -12,7 +13,7 @@ public class NumericOperator extends Operator {
     public static final StringSet numericOperators_precedence = new StringSet("*", "/");
 
     public NumericOperator(String operator) {
-        super(operator, numericOperators, null);
+        super(operator, numericOperators, 0);
         if (numericOperators_precedence.contains(operator)) {
             this.precedenceLevel = PrecedenceLevel.SINGLE;
         } else {
