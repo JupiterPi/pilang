@@ -12,7 +12,8 @@ public class ExpressionPrecedencer {
     private SignSequence signs;
 
     public ExpressionPrecedencer(SignSequence signs) {
-        this.signs = applyPrecedence(signs);
+        List<PrecedenceSign> precedenceSigns = generatePrecedenceSigns(signs);
+        this.signs = generateNewSignSequence(precedenceSigns);
     }
 
     public SignSequence getSigns() {
@@ -21,7 +22,7 @@ public class ExpressionPrecedencer {
 
     /* precedencer */
 
-    private SignSequence applyPrecedence(SignSequence signs) {
+    private List<PrecedenceSign> generatePrecedenceSigns(SignSequence signs) {
         List<PrecedenceSign> precedenceSigns = new ArrayList<>();
 
         // generate signs list, check operator-value order
@@ -33,6 +34,46 @@ public class ExpressionPrecedencer {
             lastIsOperator = isOperator;
         }
 
+        // determine iteration bundling level (NONE/SINGLE or BUNDLE/BUNDLE_LARGER)
+        int highestPrecedenceLevel = PrecedenceLevel.NONE;
+        for (PrecedenceSign precedenceSign : precedenceSigns) {
+            if (precedenceSign.getPrecedenceLevel() > highestPrecedenceLevel) {
+                highestPrecedenceLevel = precedenceSign.getPrecedenceLevel();
+            }
+        }
+        if (highestPrecedenceLevel >= PrecedenceLevel.BUNDLE) {
+
+            // bundle
+            List<PrecedenceSign> bundledPrecedenceSigns = new ArrayList<>();
+            List<PrecedenceSign> buffer = new ArrayList<>();
+            for (PrecedenceSign precedenceSign : precedenceSigns) {
+                int currentPrecedenceLevel = precedenceSign.getPrecedenceLevel();
+                if (currentPrecedenceLevel >= highestPrecedenceLevel) {
+                    if (!buffer.isEmpty()) {
+                        SignSequence bufferSigns = new SignSequence();
+                        for (PrecedenceSign sign : buffer) {
+                            bufferSigns.add(sign.getSign());
+                        }
+                        bundledPrecedenceSigns.add(new PrecedenceSign(new Expression(bufferSigns)));
+                        buffer = new ArrayList<>();
+                    }
+                    bundledPrecedenceSigns.add(precedenceSign);
+                } else {
+                    buffer.add(precedenceSign);
+                }
+            }
+            if (!buffer.isEmpty()) {
+                SignSequence bufferSigns = new SignSequence();
+                for (PrecedenceSign sign : buffer) {
+                    bufferSigns.add(sign.getSign());
+                }
+                bundledPrecedenceSigns.add(new PrecedenceSign(new Expression(bufferSigns)));
+            }
+
+            precedenceSigns = bundledPrecedenceSigns;
+
+        }
+
         // determine precedence
         for (int i = 0; i < precedenceSigns.size(); i++) {
             PrecedenceSign precedenceSign = precedenceSigns.get(i);
@@ -41,9 +82,15 @@ public class ExpressionPrecedencer {
             int precedenceLevel = precedenceSign.getPrecedenceLevel();
             for (int offset : new int[]{-1, +1}) {
                 PrecedenceSign affectedPrecedenceSign = precedenceSigns.get(i + offset);
-                if (precedenceLevel > affectedPrecedenceSign.getPrecedenceLevel()) affectedPrecedenceSign.setPrecedenceLevel(precedenceLevel);
+                if (precedenceLevel > affectedPrecedenceSign.getPrecedenceLevel())
+                    affectedPrecedenceSign.setPrecedenceLevel(precedenceLevel);
             }
         }
+
+        return precedenceSigns;
+    }
+
+    private SignSequence generateNewSignSequence(List<PrecedenceSign> precedenceSigns) {
 
         // extract base precedence
         int basePrecedenceLevel = Integer.MAX_VALUE;
@@ -70,10 +117,16 @@ public class ExpressionPrecedencer {
                 }
             }
         }
-        if (isSinglePrecedence) return signs;
+        if (isSinglePrecedence) {
+            SignSequence signs = new SignSequence();
+            for (PrecedenceSign precedenceSign : precedenceSigns) {
+                signs.add(precedenceSign.getSign());
+            }
+            return signs;
+        }
 
         // generate new signs
-        signs = new SignSequence();
+        SignSequence signs = new SignSequence();
         boolean currentlyPrecedence = false;
         SignSequence buffer = new SignSequence();
         for (PrecedenceSign precedenceSign : precedenceSigns) {
