@@ -111,19 +111,4 @@ public class Expression extends Value {
                 "" + value +
                 '}';
     }
-
-    public static void main(String[] args) {
-        Lexer lexer = new Lexer("1 != 2 && 3 != 3");
-        TokenSequence tokens = lexer.getTokens();
-
-        ExpressionParser parser = new ExpressionParser(tokens);
-        SignSequence signs = parser.getSigns();
-
-        System.out.println(signs);
-
-        ExpressionPrecedencer precedencer = new ExpressionPrecedencer(signs);
-        signs = precedencer.getSigns();
-
-        System.out.println(signs);
-    }
 }
