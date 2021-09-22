@@ -4,6 +4,7 @@ import jupiterpi.pilang.script.parser.tokens.Token;
 import jupiterpi.pilang.script.parser.tokens.TokenSequence;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +28,11 @@ public class DataType {
     public DataType(BaseType baseType, List<Specification> specificationStack) {
         this.baseType = baseType;
         this.specificationStack = specificationStack;
+    }
+
+    public DataType(BaseType baseType, Specification... specificationStack) {
+        this.baseType = baseType;
+        this.specificationStack = Arrays.asList(specificationStack);
     }
 
     public static DataType fromTokenSequence(TokenSequence tokens) {

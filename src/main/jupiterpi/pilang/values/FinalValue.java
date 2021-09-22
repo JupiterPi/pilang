@@ -2,6 +2,9 @@ package jupiterpi.pilang.values;
 
 import jupiterpi.pilang.script.runtime.Scope;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FinalValue extends Value {
     protected DataType type;
     protected String value;
@@ -38,6 +41,10 @@ public class FinalValue extends Value {
 
     public static FinalValue formChar(String value) {
         return new FinalValue(new DataType(DataType.BaseType.INT), String.format("'%s'", value));
+    }
+
+    public static FinalValue fromString(String value) {
+        return new FinalValue(new DataType(DataType.BaseType.CHAR, DataType.Specification.ARRAY), value);
     }
 
     public static FinalValue fromVoid() {

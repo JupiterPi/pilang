@@ -14,7 +14,7 @@ import jupiterpi.pilang.values.other.Literal;
 import jupiterpi.pilang.values.other.VariableReference;
 import jupiterpi.pilang.values.parsing.signs.Sign;
 import jupiterpi.pilang.values.parsing.signs.SignSequence;
-import jupiterpi.pilang.values.properties.Property;
+import jupiterpi.pilang.values.properties.PropertyWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class ExpressionParser {
 
             Value source = (Value) parseSign(sourceTokens);
             String propertyName = propertyTokens.get(1).getContent();
-            return new Property(source, propertyName);
+            return new PropertyWrapper(source, propertyName);
         }
 
         // array call wrapper

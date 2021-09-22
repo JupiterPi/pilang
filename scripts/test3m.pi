@@ -1,0 +1,5 @@
+notice debug;
+
+int a = 21 * 2;
+char[] b = a:str;
+char[] c = (21 * 2):str;

@@ -7,7 +7,6 @@ import jupiterpi.pilang.util.StringSet;
 import jupiterpi.pilang.values.DataType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static jupiterpi.pilang.script.parser.tokens.Token.Type.*;
@@ -149,6 +148,7 @@ public class Lexer {
         if (listContains(whitespaces, c)) return "whitespace";
         if (c.equals(",")) return "comma";
         if (c.equals(";")) return "semicolon";
+        if (c.equals(":")) return "colon";
         new Exception("invalid character: " + c).printStackTrace();
         return null;
     }
@@ -213,6 +213,9 @@ public class Lexer {
                 break;
             case "semicolon":
                 type = SEMICOLON;
+                break;
+            case "colon":
+                type = COLON;
                 break;
             case "assign":
                 type = ASSIGN;
