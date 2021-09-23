@@ -21,3 +21,10 @@ debug.print("---");
 char c = 'a';
 debug.print_char(c:char);
 debug.print(c:str);
+
+debug.print("---");
+debug.print("---");
+
+char[] str = "hello";
+debug.print(str);
+debug.print_int(str:length);

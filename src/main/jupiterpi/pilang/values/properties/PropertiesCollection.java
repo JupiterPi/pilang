@@ -3,10 +3,7 @@ package jupiterpi.pilang.values.properties;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
-import jupiterpi.pilang.values.properties.collections.BoolProperties;
-import jupiterpi.pilang.values.properties.collections.CharProperties;
-import jupiterpi.pilang.values.properties.collections.FloatProperties;
-import jupiterpi.pilang.values.properties.collections.IntProperties;
+import jupiterpi.pilang.values.properties.collections.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +38,7 @@ public abstract class PropertiesCollection {
         collections.add(new FloatProperties());
         collections.add(new BoolProperties());
         collections.add(new CharProperties());
+        collections.add(new PrimitiveArrayProperties());
     }
 
     public static Property getProperty(String propertyName, DataType sourceType) {
