@@ -1,8 +1,12 @@
 package jupiterpi.pilang.values;
 
 import jupiterpi.pilang.script.runtime.Scope;
+import jupiterpi.pilang.values.arrays.ArrayLiteral;
+import jupiterpi.pilang.values.arrays.ArrayValue;
+import jupiterpi.tools.util.AppendingList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FinalValue extends Value {
@@ -44,7 +48,11 @@ public class FinalValue extends Value {
     }
 
     public static FinalValue fromString(String value) {
-        return new FinalValue(new DataType(DataType.BaseType.CHAR, DataType.Specification.ARRAY), value);
+        List<Value> values = new ArrayList<>();
+        for (String c : value.split("")) {
+            values.add(FinalValue.formChar(c));
+        }
+        return new ArrayValue(values).makeFinal(null);
     }
 
     public static FinalValue fromVoid() {

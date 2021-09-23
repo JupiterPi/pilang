@@ -22,4 +22,12 @@ public class PropertyWrapper extends Wrapper {
     public String get(Scope scope) {
         return PropertiesCollection.getProperty(propertyName, source.getType(scope)).readProperty(source, scope).get(scope);
     }
+
+    @Override
+    public String toString() {
+        return "PropertyWrapper{" +
+                "propertyName=" + propertyName +
+                ", source='" + source + '\'' +
+                '}';
+    }
 }

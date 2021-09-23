@@ -1,5 +1,23 @@
 notice debug;
 
-int a = 21 * 2;
-char[] b = a:str;
-char[] c = (21 * 2):str;
+int i = 42;
+debug.print_int(i:int);
+debug.print(i:str);
+
+debug.print("---");
+
+float f = 3.14;
+debug.print_float(f:float);
+debug.print(f:str);
+
+debug.print("---");
+
+bool b = true;
+debug.print_bool(b:bool);
+debug.print(b:str);
+
+debug.print("---");
+
+char c = 'a';
+debug.print_char(c:char);
+debug.print(c:str);

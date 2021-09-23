@@ -63,7 +63,9 @@ public class ExpressionParser {
         }
 
         // property
-        if (tokens.endsWith(new TokenSequence(new Token(Token.Type.COLON), new Token(Token.Type.IDENTIFIER)))) {
+        if (
+                tokens.endsWith(new TokenSequence(new Token(Token.Type.COLON), new Token(Token.Type.IDENTIFIER))) ||
+                tokens.endsWith(new TokenSequence(new Token(Token.Type.COLON), new Token(Token.Type.TYPE)))) {
             int propertyIndex = tokens.lastIndexOf(new Token(Token.Type.COLON));
             TokenSequence propertyTokens = tokens.subsequence(propertyIndex);
             TokenSequence sourceTokens = tokens.subsequence(0, propertyIndex);

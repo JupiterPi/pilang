@@ -31,4 +31,12 @@ public class ArrayCallWrapper extends Wrapper {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "ArrayCallWrapper{" +
+                "index=" + index +
+                ", source=" + source +
+                '}';
+    }
 }

@@ -26,4 +26,12 @@ public class FunctionCallWrapper extends Wrapper {
         Function function = this.source.getFunction(scope);
         return function.executeFunction(parameters, scope).get(scope);
     }
+
+    @Override
+    public String toString() {
+        return "FunctionCallWrapper{" +
+                "parameters=" + parameters +
+                ", source=" + source +
+                '}';
+    }
 }
