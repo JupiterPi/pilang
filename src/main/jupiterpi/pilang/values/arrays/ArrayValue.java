@@ -1,7 +1,6 @@
 package jupiterpi.pilang.values.arrays;
 
 import jupiterpi.pilang.script.runtime.Scope;
-import jupiterpi.pilang.values.CommonValue;
 import jupiterpi.pilang.values.DataType;
 import jupiterpi.pilang.values.Value;
 import jupiterpi.tools.util.AppendingList;
@@ -38,13 +37,10 @@ public class ArrayValue extends Value {
             }
         }
 
+        /*if (type == null) {
+            type = new DataType(DataType.BaseType.ANY);
+        }*/
         return type.sp_asArray();
-    }
-
-    @Override
-    public DataType getTechnicalType(Scope scope) {
-        getType(scope);
-        return values.size() == 0 ? null : values.get(0).getTechnicalType(scope);
     }
 
     @Override

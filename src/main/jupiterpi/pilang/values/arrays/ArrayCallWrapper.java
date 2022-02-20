@@ -21,11 +21,6 @@ public class ArrayCallWrapper extends Wrapper {
     }
 
     @Override
-    public DataType getTechnicalType(Scope scope) {
-        return source.getTechnicalType(scope).sp_of();
-    }
-
-    @Override
     public String get(Scope scope) {
         List<Value> array = this.source.getArray(scope);
         int index = this.index.getInteger(scope);

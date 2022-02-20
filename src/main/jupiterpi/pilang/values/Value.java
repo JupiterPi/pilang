@@ -13,7 +13,6 @@ import java.util.List;
 
 public abstract class Value implements Sign {
     public abstract DataType getType(Scope scope);
-    public abstract DataType getTechnicalType(Scope scope);
     public abstract String get(Scope scope);
 
     public int getInteger(Scope scope) {
@@ -60,7 +59,16 @@ public abstract class Value implements Sign {
             TokenSequence tokens = new Lexer(immediateTokens.get(0).getContent()).getTokens();
             for (TokenSequence item : tokens.split(new Token(Token.Type.COMMA))) {
                 String str = item.backToString();
-                values.add(new FinalValue(type.sp_of(), str));
+                values.add(new Value() {
+                    @Override
+                    public DataType getType(Scope scope) {
+                        return type.sp_of();
+                    }
+                    @Override
+                    public String get(Scope scope) {
+                        return str;
+                    }
+                });
             }
             return values;
         } else {
