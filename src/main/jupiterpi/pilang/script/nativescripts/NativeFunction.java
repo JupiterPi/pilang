@@ -4,6 +4,7 @@ import jupiterpi.pilang.script.parser.Lexer;
 import jupiterpi.pilang.script.runtime.Function;
 import jupiterpi.pilang.script.runtime.Scope;
 import jupiterpi.pilang.values.DataType;
+import jupiterpi.pilang.values.FinalValue;
 import jupiterpi.pilang.values.Value;
 
 import java.util.ArrayList;
@@ -38,17 +39,7 @@ public abstract class NativeFunction extends Function {
 
         Value returnValue = run(newParameters);
         if (returnValue == null) {
-            returnValue = new Value() {
-                @Override
-                public DataType getType(Scope scope) {
-                    return new DataType(DataType.BaseType.VOID);
-                }
-
-                @Override
-                public String get(Scope scope) {
-                    return "";
-                }
-            };
+            returnValue = FinalValue.fromVoid();
         } else System.out.println("non-null return value");
         return returnValue;
     }

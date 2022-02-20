@@ -1,7 +1,5 @@
 package jupiterpi.pilang.values;
 
-import jupiterpi.pilang.script.runtime.Scope;
-
 public abstract class Wrapper extends Value {
     protected Value source;
 
@@ -12,12 +10,6 @@ public abstract class Wrapper extends Value {
     public Value getSource() {
         return source;
     }
-
-    @Override
-    public abstract DataType getType(Scope scope);
-
-    @Override
-    public abstract String get(Scope scope);
 
     @Override
     public String toString() {

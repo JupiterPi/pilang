@@ -50,6 +50,12 @@ public class FunctionLiteral extends Value {
     }
 
     @Override
+    public DataType getTechnicalType(Scope scope) {
+        checkCreated(scope);
+        return
+    }
+
+    @Override
     public String get(Scope scope) {
         checkCreated(scope);
         return String.format("{%s}", function.getReference());

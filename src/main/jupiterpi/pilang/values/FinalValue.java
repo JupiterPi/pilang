@@ -1,15 +1,12 @@
 package jupiterpi.pilang.values;
 
 import jupiterpi.pilang.script.runtime.Scope;
-import jupiterpi.pilang.values.arrays.ArrayLiteral;
 import jupiterpi.pilang.values.arrays.ArrayValue;
-import jupiterpi.tools.util.AppendingList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class FinalValue extends Value {
+public class FinalValue extends CommonValue {
     protected DataType type;
     protected String value;
 

@@ -19,6 +19,11 @@ public class PropertyWrapper extends Wrapper {
     }
 
     @Override
+    public DataType getTechnicalType(Scope scope) {
+        return getType(scope);
+    }
+
+    @Override
     public String get(Scope scope) {
         return PropertiesCollection.getProperty(propertyName, source.getType(scope)).readProperty(source, scope).get(scope);
     }

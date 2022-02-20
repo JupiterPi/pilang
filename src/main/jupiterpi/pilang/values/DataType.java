@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class DataType {
     public enum BaseType {
-        INT, FLOAT, BOOL, CHAR, VOID
+        INT, FLOAT, BOOL, CHAR, VOID, ANY
     }
 
     public enum Specification {
@@ -125,6 +125,19 @@ public class DataType {
         DataType dataType = (DataType) o;
         return baseType == dataType.baseType &&
                 Objects.equals(specificationStack, dataType.specificationStack);
+    }
+
+    public boolean fits(DataType input) {
+        if (baseType == BaseType.ANY) {
+            List<Specification> inputSpecificationStack = input.getSpecificationStack();
+            if (!(inputSpecificationStack.size() >= specificationStack.size())) return false;
+            for (int ndLast = 1; specificationStack.size()-ndLast >= 0; ndLast++) {
+                Specification specification = specificationStack.get(specificationStack.size() - ndLast);
+                Specification inputSpecification = inputSpecificationStack.get(inputSpecificationStack.size() - ndLast);
+                if (specification != inputSpecification) return false;
+            }
+            return true;
+        } else return equals(input);
     }
 
     @Override

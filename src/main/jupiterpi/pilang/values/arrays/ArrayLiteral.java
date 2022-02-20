@@ -20,16 +20,6 @@ public class ArrayLiteral extends ArrayValue {
     }
 
     @Override
-    public DataType getType(Scope scope) {
-        return super.getType(scope);
-    }
-
-    @Override
-    public String get(Scope scope) {
-        return super.get(scope);
-    }
-
-    @Override
     public String toString() {
         AppendingList str = new AppendingList();
         for (Value value : values) {

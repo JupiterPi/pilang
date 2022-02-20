@@ -22,6 +22,11 @@ public class FunctionCallWrapper extends Wrapper {
     }
 
     @Override
+    public DataType getTechnicalType(Scope scope) {
+        return source.getTechnicalType(scope).sp_of();
+    }
+
+    @Override
     public String get(Scope scope) {
         Function function = this.source.getFunction(scope);
         return function.executeFunction(parameters, scope).get(scope);

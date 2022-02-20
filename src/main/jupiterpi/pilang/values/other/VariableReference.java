@@ -24,6 +24,11 @@ public class VariableReference extends Value {
     }
 
     @Override
+    public DataType getTechnicalType(Scope scope) {
+        return getVariable(scope).getTechnicalType(scope);
+    }
+
+    @Override
     public String get(Scope scope) {
         return getVariable(scope).get(scope);
     }
