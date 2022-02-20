@@ -2,8 +2,12 @@ package jupiterpi.pilang.script.nativescripts;
 
 import jupiterpi.pilang.Main;
 import jupiterpi.pilang.script.runtime.ReferenceRegistry;
+import jupiterpi.pilang.values.FinalValue;
 import jupiterpi.pilang.values.Value;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class Debug extends NativeScript {
@@ -32,6 +36,19 @@ public class Debug extends NativeScript {
             protected Value run(List<Value> parameters) {
                 print("");
                 return null;
+            }
+        });
+
+        addFunction("readln", "char[]", new NativeFunction(this) {
+            @Override
+            protected Value run(List<Value> parameters) {
+                System.out.print("[DEBUG] > ");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                try {
+                    return FinalValue.fromString(reader.readLine());
+                } catch (IOException e) {
+                    return FinalValue.fromString("");
+                }
             }
         });
     }

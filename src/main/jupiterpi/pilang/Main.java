@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         Path rootDir = Path.getRunningDirectory();
-        String manifestFileName = "test3.pm";
+        String manifestFileName = "test4.pm";
 
         if (args.length > 0) {
             if (args[0].equals("--debug")) {

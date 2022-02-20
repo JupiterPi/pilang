@@ -1,0 +1,4 @@
+notice debug;
+
+char[] input = debug.readln();
+debug.print(input);

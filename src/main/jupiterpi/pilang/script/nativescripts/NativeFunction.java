@@ -29,7 +29,7 @@ public abstract class NativeFunction extends Function {
                     new Exception(String.format("mismatching types in parameters (expected %s but found %s)", parameterType, value.getType(callingScope))).printStackTrace();
                 }
             }
-        } else new Exception("mismatching parameters").printStackTrace();
+        } else new Exception(String.format("mismatching parameters (expected %s but got %s)", this.parameters.size(), parameters.size())).printStackTrace();
 
         List<Value> newParameters = new ArrayList<>();
         for (Value parameter : parameters) {
@@ -49,7 +49,7 @@ public abstract class NativeFunction extends Function {
                     return "";
                 }
             };
-        } else System.out.println("non-null return value");
+        }
         return returnValue;
     }
 
